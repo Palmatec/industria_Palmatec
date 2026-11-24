@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control de Proceso de Esterilización (FR-IN-PA-ES-01) - Palmatec</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-blue: #004085;
+      --primary-dark: #002752;
+      --accent-green: #76BC21;
+      --accent-green-hover: #619c1b;
+      --bg-light: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-dark: #1E293B;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+      --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.08);
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    header {
+      background: #fff;
+      padding: 1.1rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header img {
+      height: 48px;
+      object-fit: contain;
+    }
+    .logo-fallback {
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--primary-blue);
+      letter-spacing: 0.5px;
+      display: none;
+      align-items: center;
+    }
+    .header-title {
+      font-size: 1.1rem;
+      color: var(--primary-blue);
+      font-weight: 600;
+    }
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .doc-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      background: #F1F5F9;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+    .autosave-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.8rem;
+      color: #15803D;
+      background: #DCFCE7;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .hero-banner-container {
+      width: 100%;
+      height: 220px;
+      position: relative;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-pattern {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.6;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: #fff;
+      padding: 0 1.5rem;
+    }
+    .hero-doc-pill {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      color: #F8FAFC;
+    }
+    .hero-content h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .hero-content p {
+      color: #E2E8F0;
+      font-size: 0.98rem;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .main-container {
+      max-width: 1380px;
+      margin: -2.2rem auto 4rem;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 1.75rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+    }
+    .card-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .card h3 {
+      color: var(--primary-blue);
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .turno-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      gap: 1rem;
+    }
+
+    .sterilizers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.75rem;
+    }
+    @media (max-width: 1024px) {
+      .sterilizers-grid { grid-template-columns: 1fr; }
+    }
+
+    .stage-box {
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .stage-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 0.75rem;
+    }
+
+    .fields-row-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+    .fields-row-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+    @media (max-width: 560px) {
+      .fields-row-3, .fields-row-2 { grid-template-columns: 1fr; }
+    }
+
+    .form-group { margin-bottom: 0; }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.8rem;
+      margin-bottom: 0.35rem;
+      color: var(--text-dark);
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      background-color: #FFFFFF;
+      color: var(--text-dark);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(0, 64, 133, 0.15);
+    }
+
+    .time-input-wrap {
+      display: flex;
+      gap: 4px;
+    }
+    .btn-now {
+      background: #EFF6FF;
+      color: var(--primary-blue);
+      border: 1px solid #BFDBFE;
+      border-radius: 6px;
+      padding: 0 9px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .btn-now:hover {
+      background: #DBEAFE;
+    }
+
+    .btn {
+      background-color: var(--accent-green);
+      color: #FFFFFF;
+      font-weight: 600;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .btn:hover { background-color: var(--accent-green-hover); }
+    .btn-block { width: 100%; }
+    .btn-primary-blue { background-color: var(--primary-blue); color: #fff; }
+    .btn-primary-blue:hover { background-color: var(--primary-dark); }
+    .btn-secondary { background-color: #64748B; color: #fff; }
+    .btn-secondary:hover { background-color: #475569; }
+    .btn-info { background-color: #0284C7; color: #fff; padding: 6px 10px; font-size: 0.78rem; }
+    .btn-info:hover { background-color: #0369A1; }
+    .btn-warning { background-color: #F59E0B; color: #fff; padding: 6px 10px; font-size: 0.78rem; }
+    .btn-warning:hover { background-color: #D97706; }
+    .btn-danger { background-color: #EF4444; color: #fff; padding: 6px 10px; font-size: 0.78rem; }
+    .btn-danger:hover { background-color: #DC2626; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .status-idle { background: #F1F5F9; color: var(--text-muted); }
+    .status-running { background: #FEF3C7; color: #B45309; }
+    .badge-est {
+      display: inline-flex;
+      align-items: center;
+      background: #EFF6FF;
+      color: #1D4ED8;
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .badge-sync-ok {
+      display: inline-flex;
+      align-items: center;
+      background: #DCFCE7;
+      color: #15803D;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.74rem;
+      font-weight: 600;
+    }
+    .badge-sync-pend {
+      display: inline-flex;
+      align-items: center;
+      background: #FEF3C7;
+      color: #B45309;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.74rem;
+      font-weight: 600;
+    }
+
+    .table-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .toolbar-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .search-box {
+      min-width: 240px;
+    }
+    .search-box input {
+      background-color: #F8FAFC;
+    }
+    .table-responsive { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.86rem; }
+    th {
+      background: #F1F5F9;
+      color: var(--text-dark);
+      padding: 11px 12px;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border-color);
+      white-space: nowrap;
+    }
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    tr:hover td {
+      background-color: #F8FAFC;
+      color: var(--text-dark);
+    }
+
+    .feedback-panel {
+      margin-top: 0;
+      background: #0F172A;
+      color: #4ADE80;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.82rem;
+      display: none;
+      border: 1px solid #22C55E;
+      white-space: pre-wrap;
+    }
+    .feedback-panel.warn {
+      color: #FBBF24;
+      border-color: #F59E0B;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .modal-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 680px;
+      box-shadow: var(--shadow-lg);
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .modal-close:hover { color: var(--text-dark); }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 1rem;
+    }
+    .detail-item {
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+    }
+    .detail-item span {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-blue);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <img src="https://wppalmatec.azurewebsites.net/wp-content/uploads/2022/07/1-palmateclogo.png" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+      <div id="logoFallback" class="logo-fallback">PALMATEC</div>
+      <div class="header-title">Control del Proceso de Esterilización</div>
+    </div>
+
+    <div class="header-badges">
+      <div class="autosave-badge" id="autosaveStatus">Borrador sincronizado</div>
+      <div class="doc-badge">
+        <span><strong>Código:</strong> FR-IN-PA-ES-01 | <strong>Versión:</strong> 4 | <strong>Aprobado:</strong> J.Gamboa</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero-banner-container">
+    <div class="hero-pattern"></div>
+    <div class="hero-content">
+      
+      <h1>Control del Proceso de Esterilización</h1>
+      <p></p>
+    </div>
+  </section>
+
+  <div class="main-container">
+
+    <!-- Datos de Jornada y Turno -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Datos de la Jornada y Operadores de Turno</h3>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">
+        </span>
+      </div>
+
+      <div class="turno-grid">
+        <div class="form-group">
+          <label for="fecha">Fecha *</label>
+          <input type="date" id="fecha" class="turno-field" required>
+        </div>
+        <div class="form-group">
+          <label for="horaInicio">Hora inicio</label>
+          <input type="time" id="horaInicio" class="turno-field">
+        </div>
+        <div class="form-group">
+          <label for="horaFinal">Hora final</label>
+          <input type="time" id="horaFinal" class="turno-field">
+        </div>
+        <div class="form-group">
+          <label for="totalEsterilizadores">Total de Esterilizadores</label>
+          <input type="number" id="totalEsterilizadores" class="turno-field" min="1" value="2">
+        </div>
+        <div class="form-group">
+          <label for="op1">Operador Turno 1</label>
+          <input type="text" id="op1" class="turno-field" placeholder="Nombre operador Turno 1">
+        </div>
+        <div class="form-group">
+          <label for="op2">Operador turno 2</label>
+          <input type="text" id="op2" class="turno-field" placeholder="Nombre operador turno 2">
+        </div>
+        <div class="form-group">
+          <label for="op3">Operador turno 3</label>
+          <input type="text" id="op3" class="turno-field" placeholder="Nombre operador turno 3">
+        </div>
+      </div>
+    </div>
+
+    <!-- Dos Esterilizadores Independientes en Paralelo -->
+    <div class="sterilizers-grid" id="sterilizersContainer"></div>
+
+    <!-- Panel de estado de guardado / SharePoint -->
+    <div id="feedbackPanel" class="feedback-panel"></div>
+
+    <!-- Historial de Ciclos -->
+    <div class="card">
+      <div class="table-toolbar">
+        <h3>Ciclos Guardados</h3>
+        <div class="toolbar-actions">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Buscar por fecha, esterilizador u operador..." onkeyup="renderTable()">
+          </div>
+
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Esterilizador</th>
+              <th>Llenado RFF</th>
+              <th>Inicio - Final Ciclo</th>
+              <th>Desaireación (S / Bar)</th>
+              <th>1er Pico (S / Bar)</th>
+              <th>2do Pico (S / Bar)</th>
+              <th>Sostenim. (S / Bar)</th>
+              <th>Total Est. (Min)</th>
+              <th>Descarga RFF</th>
+              <th>SharePoint</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal Detalle -->
+  <div class="modal-overlay" id="cycleModal">
+    <div class="modal-card">
+      <span class="modal-close" onclick="closeCycleModal()">&times;</span>
+      <h3 style="color: var(--primary-blue);">Detalle del Ciclo Registrado</h3>
+      <p id="modalSubtitle" style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px;"></p>
+      <div class="detail-grid" id="modalDetailGrid"></div>
+    </div>
+  </div>
+
+  <!-- Modal Guardando en SharePoint -->
+  <div class="modal-overlay" id="syncModal">
+    <div class="modal-card" style="max-width: 410px; text-align: center;">
+      <div class="spinner"></div>
+      <h3 style="color: var(--primary-blue); margin-bottom: 0.5rem;" id="syncModalTitle">Guardando en SharePoint...</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;" id="syncModalText">Enviando fila al archivo de Excel...</p>
+    </div>
+  </div>
+
+  <script>
+    // PEGUE AQUÍ LA URL DE SU FLUJO DE POWER AUTOMATE QUE AGREGA FILAS AL EXCEL EN SHAREPOINT
+    const SHAREPOINT_EXCEL_FLOW_URL = "";
+
+    const STORAGE_DRAFTS = "palmatec_es01_sp_drafts_v3";
+    const STORAGE_HISTORY = "palmatec_es01_sp_history_v3";
+
+    const EST_FIELDS = [
+      "llenado_inicio", "llenado_final", "llenado_min",
+      "ciclo_inicio",
+      "desaireacion_s", "desaireacion_bar",
+      "pico1_s", "pico1_bar",
+      "pico2_s", "pico2_bar",
+      "sostenimiento_s", "sostenimiento_bar",
+      "ciclo_final", "tiempo_total_esterilizacion_min",
+      "descarga_inicio", "descarga_final", "descarga_min",
+      "observaciones"
+    ];
+
+    function getNowHHMM() {
+      const d = new Date();
+      return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+    }
+
+    function getTodayISO() {
+      const d = new Date();
+      return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    }
+
+    function calcMinutes(startStr, endStr) {
+      if (!startStr || !endStr) return "";
+      const [sh, sm] = startStr.split(":").map(Number);
+      const [eh, em] = endStr.split(":").map(Number);
+      let diff = (eh * 60 + em) - (sh * 60 + sm);
+      if (diff < 0) diff += 1440;
+      return diff;
+    }
+
+    function buildSterilizerCard(num) {
+      return `
+        <div class="card" data-est="${num}">
+          <div class="card-header-flex">
+            <h3>ESTERILIZADOR Nº ${num}</h3>
+            <span class="status-badge status-idle" id="status-est-${num}">Disponible</span>
+          </div>
+
+          <div class="stage-box">
+            <div class="stage-title">Tiempo Llenado de RFF</div>
+            <div class="fields-row-3">
+              <div class="form-group">
+                <label>Inicio</label>
+                <div class="time-input-wrap">
+                  <input type="time" data-field="llenado_inicio">
+                  <button type="button" class="btn-now" onclick="setNow(${num}, 'llenado_inicio')">Ahora</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Final</label>
+                <div class="time-input-wrap">
+                  <input type="time" data-field="llenado_final">
+                  <button type="button" class="btn-now" onclick="setNow(${num}, 'llenado_final')">Ahora</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Tiempo (Min)</label>
+                <input type="number" step="0.1" data-field="llenado_min" placeholder="Min">
+              </div>
+            </div>
+          </div>
+
+          <div class="stage-box">
+            <div class="stage-title">Ciclo de Esterilización</div>
+
+            <div class="fields-row-2" style="margin-bottom: 0.75rem;">
+              <div class="form-group">
+                <label>Inicio del Ciclo de Esterilización</label>
+                <div class="time-input-wrap">
+                  <input type="time" data-field="ciclo_inicio">
+                  <button type="button" class="btn-now" onclick="setNow(${num}, 'ciclo_inicio')">Ahora</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="fields-row-2" style="margin-bottom: 0.75rem;">
+              <div class="form-group">
+                <label>Desaireación — Tiempo (S)</label>
+                <input type="number" step="1" data-field="desaireacion_s" placeholder="Tiempo (S)">
+              </div>
+              <div class="form-group">
+                <label>Desaireación — Presión (Bar)</label>
+                <input type="number" step="0.01" data-field="desaireacion_bar" placeholder="Presión (Bar)">
+              </div>
+            </div>
+
+            <div class="fields-row-2" style="margin-bottom: 0.75rem;">
+              <div class="form-group">
+                <label>Primer Pico — Tiempo (S)</label>
+                <input type="number" step="1" data-field="pico1_s" placeholder="Tiempo (S)">
+              </div>
+              <div class="form-group">
+                <label>Primer Pico — Presión (Bar)</label>
+                <input type="number" step="0.01" data-field="pico1_bar" placeholder="Presión (Bar)">
+              </div>
+            </div>
+
+            <div class="fields-row-2" style="margin-bottom: 0.75rem;">
+              <div class="form-group">
+                <label>Segundo Pico — Tiempo (S)</label>
+                <input type="number" step="1" data-field="pico2_s" placeholder="Tiempo (S)">
+              </div>
+              <div class="form-group">
+                <label>Segundo Pico — Presión (Bar)</label>
+                <input type="number" step="0.01" data-field="pico2_bar" placeholder="Presión (Bar)">
+              </div>
+            </div>
+
+            <div class="fields-row-2" style="margin-bottom: 0.75rem;">
+              <div class="form-group">
+                <label>Sostenimiento — Tiempo (S)</label>
+                <input type="number" step="1" data-field="sostenimiento_s" placeholder="Tiempo (S)">
+              </div>
+              <div class="form-group">
+                <label>Sostenimiento — Presión (Bar)</label>
+                <input type="number" step="0.01" data-field="sostenimiento_bar" placeholder="Presión (Bar)">
+              </div>
+            </div>
+
+            <div class="fields-row-2">
+              <div class="form-group">
+                <label>Final del Ciclo de Esterilización</label>
+                <div class="time-input-wrap">
+                  <input type="time" data-field="ciclo_final">
+                  <button type="button" class="btn-now" onclick="setNow(${num}, 'ciclo_final')">Ahora</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Tiempo Total de Esterilización (Min)</label>
+                <input type="number" step="0.1" data-field="tiempo_total_esterilizacion_min" placeholder="Automático (Inicio - Final)" readonly style="background-color: #F1F5F9; font-weight: 600;">
+              </div>
+            </div>
+          </div>
+
+          <div class="stage-box">
+            <div class="stage-title">Tiempo Descarga de RFF</div>
+            <div class="fields-row-3">
+              <div class="form-group">
+                <label>Inicio</label>
+                <div class="time-input-wrap">
+                  <input type="time" data-field="descarga_inicio">
+                  <button type="button" class="btn-now" onclick="setNow(${num}, 'descarga_inicio')">Ahora</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Final</label>
+                <div class="time-input-wrap">
+                  <input type="time" data-field="descarga_final">
+                  <button type="button" class="btn-now" onclick="setNow(${num}, 'descarga_final')">Ahora</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Tiempo (Min)</label>
+                <input type="number" step="0.1" data-field="descarga_min" placeholder="Tiempo (Min)">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.1rem;">
+            <label>Observaciones — Esterilizador Nº ${num}</label>
+            <textarea rows="2" data-field="observaciones" placeholder="Observaciones del ciclo..."></textarea>
+          </div>
+
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-block" style="flex: 1;" onclick="saveCycle(${num})">
+              Guardar (Est. Nº ${num})
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="clearSterilizer(${num})">
+              Limpiar
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    document.getElementById("sterilizersContainer").innerHTML =
+      buildSterilizerCard(1) + buildSterilizerCard(2);
+
+    function setNow(estNum, fieldName) {
+      const card = document.querySelector(`.card[data-est="${estNum}"]`);
+      const input = card.querySelector(`[data-field="${fieldName}"]`);
+      input.value = getNowHHMM();
+      recalcCardTimes(card);
+      syncDrafts();
+    }
+
+    function recalcCardTimes(card) {
+      const f = name => card.querySelector(`[data-field="${name}"]`);
+      const lMin = calcMinutes(f("llenado_inicio").value, f("llenado_final").value);
+      f("llenado_min").value = lMin !== "" ? lMin : "";
+
+      const cMin = calcMinutes(f("ciclo_inicio").value, f("ciclo_final").value);
+      f("tiempo_total_esterilizacion_min").value = cMin !== "" ? cMin : "";
+
+      const dMin = calcMinutes(f("descarga_inicio").value, f("descarga_final").value);
+      f("descarga_min").value = dMin !== "" ? dMin : "";
+    }
+
+    function updateStatusPill(estNum) {
+      const card = document.querySelector(`.card[data-est="${estNum}"]`);
+      const pill = document.getElementById(`status-est-${estNum}`);
+      const hasContent = Array.from(card.querySelectorAll("[data-field]")).some(el => el.value.trim() !== "");
+      if (hasContent) {
+        pill.className = "status-badge status-running";
+        pill.textContent = "En proceso (autoguardado)";
+      } else {
+        pill.className = "status-badge status-idle";
+        pill.textContent = "Disponible";
+      }
+    }
+
+    function syncDrafts() {
+      const drafts = { turno: {}, est1: {}, est2: {} };
+      document.querySelectorAll(".turno-field").forEach(el => {
+        drafts.turno[el.id] = el.value;
+      });
+      [1, 2].forEach(num => {
+        const card = document.querySelector(`.card[data-est="${num}"]`);
+        card.querySelectorAll("[data-field]").forEach(el => {
+          drafts[`est${num}`][el.dataset.field] = el.value;
+        });
+        updateStatusPill(num);
+      });
+      localStorage.setItem(STORAGE_DRAFTS, JSON.stringify(drafts));
+      document.getElementById("autosaveStatus").textContent = `Borrador guardado (${getNowHHMM()})`;
+    }
+
+    function loadDrafts() {
+      const drafts = JSON.parse(localStorage.getItem(STORAGE_DRAFTS) || '{"turno":{},"est1":{},"est2":{}}');
+      if (!drafts.turno.fecha) drafts.turno.fecha = getTodayISO();
+      document.querySelectorAll(".turno-field").forEach(el => {
+        if (drafts.turno[el.id] !== undefined) el.value = drafts.turno[el.id];
+      });
+      [1, 2].forEach(num => {
+        const card = document.querySelector(`.card[data-est="${num}"]`);
+        const estData = drafts[`est${num}`] || {};
+        card.querySelectorAll("[data-field]").forEach(el => {
+          if (estData[el.dataset.field] !== undefined) el.value = estData[el.dataset.field];
+        });
+        updateStatusPill(num);
+      });
+    }
+
+    document.querySelectorAll(".turno-field").forEach(el => {
+      el.addEventListener("input", syncDrafts);
+    });
+
+    document.querySelectorAll(".card[data-est]").forEach(card => {
+      card.querySelectorAll("[data-field]").forEach(el => {
+        el.addEventListener("input", () => {
+          recalcCardTimes(card);
+          syncDrafts();
+        });
+      });
+    });
+
+    function clearSterilizer(estNum) {
+      if (!confirm(`¿Limpiar únicamente los datos del Esterilizador Nº ${estNum}? El otro esterilizador conservará sus datos.`)) return;
+      const card = document.querySelector(`.card[data-est="${estNum}"]`);
+      card.querySelectorAll("[data-field]").forEach(el => el.value = "");
+      syncDrafts();
+    }
+
+    function showSyncModal(title, text) {
+      document.getElementById("syncModalTitle").textContent = title;
+      document.getElementById("syncModalText").textContent = text;
+      document.getElementById("syncModal").style.display = "flex";
+    }
+
+    function hideSyncModal() {
+      document.getElementById("syncModal").style.display = "none";
+    }
+
+    function showFeedback(msg, isWarning = false) {
+      const panel = document.getElementById("feedbackPanel");
+      panel.style.display = "block";
+      panel.className = isWarning ? "feedback-panel warn" : "feedback-panel";
+      panel.textContent = msg;
+    }
+
+    async function sendCycleToSharePoint(record) {
+      if (!SHAREPOINT_EXCEL_FLOW_URL || SHAREPOINT_EXCEL_FLOW_URL.trim() === "") {
+        return {
+          synced: false,
+          reason: "Falta configurar SHAREPOINT_EXCEL_FLOW_URL en el código HTML."
+        };
+      }
+      const response = await fetch(SHAREPOINT_EXCEL_FLOW_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(record)
+      });
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`HTTP ${response.status}: ${errText}`);
+      }
+      return { synced: true };
+    }
+
+    async function saveCycle(estNum) {
+      const fecha = document.getElementById("fecha").value;
+      if (!fecha) {
+        alert("Por favor ingrese la Fecha en los datos de la jornada.");
+        document.getElementById("fecha").focus();
+        return;
+      }
+
+      const card = document.querySelector(`.card[data-est="${estNum}"]`);
+      const val = field => card.querySelector(`[data-field="${field}"]`).value.trim();
+
+      const record = {
+        id_ciclo: `EST${estNum}-${Date.now()}`,
+        codigo_doc: "FR-IN-PA-ES-01",
+        version_doc: 4,
+        fecha_doc: "6/7/2022",
+        aprobado_por: "J.Gamboa",
+        fecha: fecha,
+        hora_inicio: document.getElementById("horaInicio").value,
+        hora_final: document.getElementById("horaFinal").value,
+        total_esterilizadores: document.getElementById("totalEsterilizadores").value,
+        operador_turno_1: document.getElementById("op1").value.trim(),
+        operador_turno_2: document.getElementById("op2").value.trim(),
+        operador_turno_3: document.getElementById("op3").value.trim(),
+        esterilizador_n: estNum,
+        llenado_inicio: val("llenado_inicio"),
+        llenado_final: val("llenado_final"),
+        llenado_min: val("llenado_min"),
+        ciclo_inicio: val("ciclo_inicio"),
+        desaireacion_s: val("desaireacion_s"),
+        desaireacion_bar: val("desaireacion_bar"),
+        pico1_s: val("pico1_s"),
+        pico1_bar: val("pico1_bar"),
+        pico2_s: val("pico2_s"),
+        pico2_bar: val("pico2_bar"),
+        sostenimiento_s: val("sostenimiento_s"),
+        sostenimiento_bar: val("sostenimiento_bar"),
+        ciclo_final: val("ciclo_final"),
+        tiempo_total_esterilizacion_min: val("tiempo_total_esterilizacion_min"),
+        descarga_inicio: val("descarga_inicio"),
+        descarga_final: val("descarga_final"),
+        descarga_min: val("descarga_min"),
+        observaciones: val("observaciones"),
+        synced_sharepoint: false
+      };
+
+      showSyncModal(
+        `Guardando Esterilizador Nº ${estNum} en SharePoint...`,
+        "Agregando registro al archivo Excel en SharePoint..."
+      );
+
+      let syncStatusMsg = "";
+      let isWarn = false;
+
+      try {
+        const res = await sendCycleToSharePoint(record);
+        if (res.synced) {
+          record.synced_sharepoint = true;
+          syncStatusMsg = `¡GUARDADO EN SHAREPOINT! Ciclo del Esterilizador Nº ${estNum} (${record.id_ciclo}) agregado al Excel.`;
+        } else {
+          isWarn = true;
+          syncStatusMsg = `Guardado localmente (${record.id_ciclo}). Pendiente de envío a SharePoint: ${res.reason}`;
+        }
+      } catch (err) {
+        isWarn = true;
+        syncStatusMsg = `Guardado localmente (${record.id_ciclo}), pero falló el envío a SharePoint (${err.message}). Use "Reenviar Pendientes a SharePoint".`;
+      }
+
+      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+      history.unshift(record);
+      localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
+
+      card.querySelectorAll("[data-field]").forEach(el => el.value = "");
+      syncDrafts();
+      renderTable();
+      hideSyncModal();
+      showFeedback(syncStatusMsg, isWarn);
+    }
+
+    async function retryPendingSharePoint() {
+      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+      const pending = history.filter(r => !r.synced_sharepoint);
+      if (!pending.length) {
+        alert("No hay registros pendientes por enviar a SharePoint.");
+        return;
+      }
+      if (!SHAREPOINT_EXCEL_FLOW_URL || SHAREPOINT_EXCEL_FLOW_URL.trim() === "") {
+        alert("Primero configure la variable SHAREPOINT_EXCEL_FLOW_URL dentro del archivo HTML.");
+        return;
+      }
+
+      showSyncModal("Reenviando a SharePoint...", `Enviando ${pending.length} ciclo(s) pendiente(s)...`);
+      let okCount = 0;
+
+      for (const rec of pending) {
+        try {
+          const res = await sendCycleToSharePoint(rec);
+          if (res.synced) {
+            rec.synced_sharepoint = true;
+            okCount++;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
+      renderTable();
+      hideSyncModal();
+      showFeedback(`Reenvío finalizado: ${okCount} de ${pending.length} ciclo(s) sincronizado(s) con SharePoint.`, okCount < pending.length);
+    }
+
+    function renderTable() {
+      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+      const q = document.getElementById("searchInput").value.toLowerCase();
+      const tbody = document.getElementById("tableBody");
+      tbody.innerHTML = "";
+
+      const filtered = history.filter(r =>
+        (r.fecha || "").toLowerCase().includes(q) ||
+        (`est ${r.esterilizador_n}`).includes(q) ||
+        (r.operador_turno_1 || "").toLowerCase().includes(q) ||
+        (r.operador_turno_2 || "").toLowerCase().includes(q) ||
+        (r.operador_turno_3 || "").toLowerCase().includes(q) ||
+        (r.observaciones || "").toLowerCase().includes(q)
+      );
+
+      if (!filtered.length) {
+        tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:1.75rem;">No hay ciclos registrados todavía.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach(r => {
+        const realIdx = history.indexOf(r);
+        const spBadge = r.synced_sharepoint
+          ? `<span class="badge-sync-ok">En Excel SP</span>`
+          : `<span class="badge-sync-pend">Pendiente</span>`;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${r.fecha}</strong></td>
+          <td><span class="badge-est">Est. Nº ${r.esterilizador_n}</span></td>
+          <td>${r.llenado_inicio || "-"} - ${r.llenado_final || "-"} (${r.llenado_min || "-"} Min)</td>
+          <td>${r.ciclo_inicio || "-"} - ${r.ciclo_final || "-"}</td>
+          <td>${r.desaireacion_s || "-"} S / ${r.desaireacion_bar || "-"} Bar</td>
+          <td>${r.pico1_s || "-"} S / ${r.pico1_bar || "-"} Bar</td>
+          <td>${r.pico2_s || "-"} S / ${r.pico2_bar || "-"} Bar</td>
+          <td><strong>${r.sostenimiento_s || "-"} S / ${r.sostenimiento_bar || "-"} Bar</strong></td>
+          <td>${r.tiempo_total_esterilizacion_min || "-"} Min</td>
+          <td>${r.descarga_inicio || "-"} - ${r.descarga_final || "-"} (${r.descarga_min || "-"} Min)</td>
+          <td>${spBadge}</td>
+          <td>
+            <div style="display:flex; gap:6px;">
+              <button class="btn btn-info" onclick="openCycleModal(${realIdx})">Ver</button>
+              <button class="btn btn-warning" onclick="editCycle(${realIdx})">Editar</button>
+              <button class="btn btn-danger" onclick="deleteCycle(${realIdx})">Eliminar</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openCycleModal(idx) {
+      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+      const r = history[idx];
+      if (!r) return;
+
+      document.getElementById("modalSubtitle").textContent =
+        `ID: ${r.id_ciclo} • Fecha: ${r.fecha} • Esterilizador Nº ${r.esterilizador_n}`;
+
+      const items = [
+        ["Hora inicio / Hora final", `${r.hora_inicio || "-"} / ${r.hora_final || "-"}`],
+        ["Total de Esterilizadores", r.total_esterilizadores || "-"],
+        ["Operador Turno 1 / T2 / T3", `${r.operador_turno_1 || "-"} / ${r.operador_turno_2 || "-"} / ${r.operador_turno_3 || "-"}`],
+        ["Tiempo Llenado de RFF", `${r.llenado_inicio || "-"} - ${r.llenado_final || "-"} (${r.llenado_min || "-"} Min)`],
+        ["Inicio / Final Ciclo Esterilización", `${r.ciclo_inicio || "-"} - ${r.ciclo_final || "-"}`],
+        ["Desaireación", `${r.desaireacion_s || "-"} S / ${r.desaireacion_bar || "-"} Bar`],
+        ["Primer Pico", `${r.pico1_s || "-"} S / ${r.pico1_bar || "-"} Bar`],
+        ["Segundo Pico", `${r.pico2_s || "-"} S / ${r.pico2_bar || "-"} Bar`],
+        ["Sostenimiento", `${r.sostenimiento_s || "-"} S / ${r.sostenimiento_bar || "-"} Bar`],
+        ["Tiempo Total de Esterilización", `${r.tiempo_total_esterilizacion_min || "-"} Min`],
+        ["Tiempo Descarga de RFF", `${r.descarga_inicio || "-"} - ${r.descarga_final || "-"} (${r.descarga_min || "-"} Min)`],
+        ["Observaciones", r.observaciones || "Sin observaciones"]
+      ];
+
+      document.getElementById("modalDetailGrid").innerHTML = items.map(([k, v]) => `
+        <div class="detail-item"><span>${k}</span>${v}</div>
+      `).join("");
+
+      document.getElementById("cycleModal").style.display = "flex";
+    }
+
+    function closeCycleModal() {
+      document.getElementById("cycleModal").style.display = "none";
+    }
+
+    function editCycle(idx) {
+      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+      const r = history[idx];
+      if (!r) return;
+
+      const card = document.querySelector(`.card[data-est="${r.esterilizador_n}"]`);
+      const hasData = Array.from(card.querySelectorAll("[data-field]")).some(el => el.value.trim() !== "");
+      if (hasData && !confirm(`El Esterilizador Nº ${r.esterilizador_n} tiene datos activos en pantalla. ¿Desea reemplazarlos con este registro?`)) {
+        return;
+      }
+
+      EST_FIELDS.forEach(f => {
+        const el = card.querySelector(`[data-field="${f}"]`);
+        if (el) el.value = r[f] || "";
+      });
+      syncDrafts();
+      window.scrollTo({ top: 200, behavior: "smooth" });
+    }
+
+    function deleteCycle(idx) {
+      if (!confirm("¿Eliminar este ciclo del historial local?")) return;
+      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+      history.splice(idx, 1);
+      localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
+      renderTable();
+    }
+
+    function clearAllHistory() {
+      if (!confirm("¿Está seguro de eliminar todo el historial guardado en este navegador?")) return;
+      localStorage.removeItem(STORAGE_HISTORY);
+      renderTable();
+    }
+
+    loadDrafts();
+    renderTable();
+  </script>
+</body>
+</html>
