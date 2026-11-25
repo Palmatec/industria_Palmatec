@@ -360,6 +360,9 @@
     <div class="card">
       <div class="card-header-flex">
         <h3>Datos de la Jornada y Operador de Turno</h3>
+        <button type="button" class="btn btn-secondary" style="padding: 7px 14px; font-size: 0.82rem;" onclick="clearJornada()">
+          Limpiar jornada
+        </button>
       </div>
 
       <div class="turno-grid">
@@ -668,6 +671,17 @@
       if (!confirm(`¿Limpiar únicamente los datos del Esterilizador Nº ${estNum}? El otro esterilizador conservará sus datos.`)) return;
       const card = document.querySelector(`.card[data-est="${estNum}"]`);
       card.querySelectorAll("[data-field]").forEach(el => el.value = "");
+      syncDrafts();
+    }
+
+    function clearJornada() {
+      if (!confirm("¿Limpiar los datos de la jornada y operador de turno?")) return;
+      document.getElementById("fecha").value = getTodayISO();
+      document.getElementById("horaInicio").value = "";
+      document.getElementById("horaFinal").value = "";
+      document.getElementById("totalEsterilizadores").value = "2";
+      document.getElementById("turno").value = "Turno 1";
+      document.getElementById("operador").value = "";
       syncDrafts();
     }
 
