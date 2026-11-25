@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control Proceso de Digestión y Prensado (FR-IN-PA-DI-01) - Palmatec</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-blue: #004085;
+      --primary-dark: #002752;
+      --accent-green: #76BC21;
+      --accent-green-hover: #619c1b;
+      --bg-light: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-dark: #1E293B;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+      --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.08);
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    header {
+      background: #fff;
+      padding: 1.1rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header img {
+      height: 48px;
+      object-fit: contain;
+    }
+    .logo-fallback {
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--primary-blue);
+      letter-spacing: 0.5px;
+      display: none;
+      align-items: center;
+    }
+    .header-title {
+      font-size: 1.1rem;
+      color: var(--primary-blue);
+      font-weight: 600;
+    }
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .doc-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: #F1F5F9;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+    .autosave-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.8rem;
+      color: #15803D;
+      background: #DCFCE7;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .hero-banner-container {
+      width: 100%;
+      height: 210px;
+      position: relative;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-pattern {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.6;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: #fff;
+      padding: 0 1.5rem;
+    }
+    .hero-content h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .hero-content p {
+      font-size: 0.92rem;
+      opacity: 0.9;
+    }
+
+    .main-container {
+      max-width: 1420px;
+      margin: -2.2rem auto 4rem;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 1.75rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+    }
+    .card-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .card h3 {
+      color: var(--primary-blue);
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 960px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .grid-4, .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .form-group { margin-bottom: 0; }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.8rem;
+      margin-bottom: 0.35rem;
+      color: var(--text-dark);
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.86rem;
+      font-family: inherit;
+      background-color: #FFFFFF;
+      color: var(--text-dark);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(0, 64, 133, 0.15);
+    }
+
+    .time-input-wrap {
+      display: flex;
+      gap: 6px;
+    }
+    .btn-now {
+      background: #EFF6FF;
+      color: var(--primary-blue);
+      border: 1px solid #BFDBFE;
+      border-radius: 6px;
+      padding: 0 10px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .btn-now:hover { background: #DBEAFE; }
+
+    .btn {
+      background-color: var(--accent-green);
+      color: #FFFFFF;
+      font-weight: 600;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn:hover { background-color: var(--accent-green-hover); }
+    .btn-secondary { background-color: #64748B; color: #fff; }
+    .btn-secondary:hover { background-color: #475569; }
+    .btn-outline {
+      background-color: #EFF6FF;
+      color: var(--primary-blue);
+      border: 1px solid #BFDBFE;
+      padding: 7px 12px;
+      font-size: 0.82rem;
+    }
+    .btn-outline:hover { background-color: #DBEAFE; }
+    .btn-danger-sm {
+      background-color: #FEE2E2;
+      color: #B91C1C;
+      border: 1px solid #FECACA;
+      padding: 5px 9px;
+      font-size: 0.78rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-danger-sm:hover { background-color: #FECACA; }
+
+    /* Tabla horaria principal */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+    table.control-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      min-width: 1120px;
+    }
+    table.control-table th {
+      background: #F1F5F9;
+      color: var(--text-dark);
+      padding: 8px 8px;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      font-size: 0.78rem;
+    }
+    table.control-table th.group-dilucion {
+      background: #EFF6FF;
+      color: var(--primary-dark);
+    }
+    table.control-table th.sub-dilucion {
+      background: #F8FAFC;
+      color: var(--primary-blue);
+    }
+    table.control-table td {
+      padding: 5px 6px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      vertical-align: middle;
+    }
+    table.control-table td.hora-cell {
+      width: 120px;
+      min-width: 115px;
+    }
+    table.control-table td input {
+      padding: 6px 7px;
+      font-size: 0.82rem;
+    }
+
+    /* Tabla de tiempo de paro (1 línea por defecto) */
+    table.paro-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      min-width: 680px;
+    }
+    table.paro-table th {
+      background: #EFF6FF;
+      color: var(--primary-dark);
+      padding: 9px 8px;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      font-size: 0.78rem;
+    }
+    table.paro-table td {
+      padding: 6px 8px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      vertical-align: middle;
+    }
+    table.paro-table td input {
+      padding: 6px 8px;
+      font-size: 0.82rem;
+    }
+
+    /* Operación del desfrutador */
+    .desfrutador-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 900px) {
+      .desfrutador-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px) {
+      .desfrutador-grid { grid-template-columns: 1fr; }
+    }
+    .desf-card {
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.95rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .desf-card.active {
+      border-color: var(--primary-blue);
+      background: #EFF6FF;
+    }
+    .desf-card span {
+      font-weight: 600;
+      font-size: 0.86rem;
+      color: var(--text-dark);
+    }
+    .desf-card input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary-blue);
+      cursor: pointer;
+    }
+
+    .actions-bar {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .feedback-panel {
+      background: #0F172A;
+      color: #4ADE80;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      display: none;
+      border: 1px solid #22C55E;
+      white-space: pre-wrap;
+    }
+    .feedback-panel.warn {
+      color: #FBBF24;
+      border-color: #F59E0B;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .modal-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 410px;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-blue);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <img src="https://wppalmatec.azurewebsites.net/wp-content/uploads/2022/07/1-palmateclogo.png" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+      <div id="logoFallback" class="logo-fallback">PALMATEC</div>
+      <div class="header-title">Control Proceso de Digestión y Prensado</div>
+    </div>
+
+    <div class="header-badges">
+      <div class="doc-badge">
+        <span><strong>Código:</strong> FR-IN-PA-DI-01 | <strong>Versión:</strong> 3 | <strong>Fecha:</strong> 08/06/2021 | <strong>Aprobado:</strong> J.Gamboa</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero-banner-container">
+    <div class="hero-pattern"></div>
+    <div class="hero-content">
+      <h1>Control Proceso de Digestión y Prensado</h1>
+    </div>
+  </section>
+
+  <div class="main-container">
+
+    <!-- 1. Encabezado: Fecha, Hora, Turno y Operador -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Datos de Jornada y Operador</h3>
+        <button type="button" class="btn btn-secondary" style="padding: 7px 14px; font-size: 0.82rem;" onclick="clearHeaderFields()">
+          Limpiar jornada
+        </button>
+      </div>
+
+      <div class="grid-4">
+        <div class="form-group">
+          <label for="fecha">Fecha *</label>
+          <input type="date" id="fecha" class="persist-field" required>
+        </div>
+        <div class="form-group">
+          <label for="hora">Hora</label>
+          <div class="time-input-wrap">
+            <input type="time" id="hora" class="persist-field">
+            <button type="button" class="btn-now" onclick="setInputNow('hora')">Ahora</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="turno">Turno</label>
+          <select id="turno" class="persist-field">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="operador">Operador</label>
+          <input type="text" id="operador" class="persist-field" placeholder="Nombre del operador">
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Registro Horario (se puede agregar línea y seleccionar hora) -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Registro Horario de Digestión y Prensado</h3>
+        <button type="button" class="btn btn-outline" onclick="addHourlyRow()">+ Agregar línea</button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="control-table" id="hourlyTable">
+          <thead>
+            <tr>
+              <th rowspan="2">Hora</th>
+              <th rowspan="2">Temperatura del digestor</th>
+              <th colspan="4" class="group-dilucion">Control de dilución</th>
+              <th rowspan="2">Control de amperios</th>
+              <th rowspan="2">Control de presión hidráulica</th>
+              <th rowspan="2">Nivel de Aceite Hidráulico</th>
+              <th rowspan="2">Nivel de llenado del digestor</th>
+              <th rowspan="2" style="width: 58px;">Acción</th>
+            </tr>
+            <tr>
+              <th class="sub-dilucion">Ac</th>
+              <th class="sub-dilucion">I-Liv</th>
+              <th class="sub-dilucion">Agua</th>
+              <th class="sub-dilucion">L.Pes</th>
+            </tr>
+            <tr>
+              <th>(t)</th>
+              <th>(°C)</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th>(A)</th>
+              <th>(PSI)</th>
+              <th>(L)</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="hourlyTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. Tiempo de Paro (1 sola línea por defecto) -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Tiempo de Paro</h3>
+        <button type="button" class="btn btn-outline" onclick="addParoRow()">+ Agregar línea</button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="paro-table" id="paroTable">
+          <thead>
+            <tr>
+              <th style="width: 160px;">Inicio de proceso</th>
+              <th style="width: 160px;">Fin de proceso</th>
+              <th>DETALLE EL MOTIVO DEL TIEMPO DE PARO</th>
+              <th style="width: 58px;">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="paroTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 4. Lectura de Horímetro (por aparte) -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Lectura de Horímetro</h3>
+      </div>
+
+      <div class="grid-4">
+        <div class="form-group">
+          <label for="horimetroInicio">Inicio</label>
+          <input type="number" step="0.01" id="horimetroInicio" class="persist-field" placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label for="horimetroFinal">Final</label>
+          <input type="number" step="0.01" id="horimetroFinal" class="persist-field" placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label for="horimetroProduccion">H/Producción</label>
+          <input type="number" step="0.01" id="horimetroProduccion" class="persist-field" placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label for="horimetroParo">H/Paro</label>
+          <input type="number" step="0.01" id="horimetroParo" class="persist-field" placeholder="0.00">
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Operación del Desfrutador -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>OPERACIÓN DEL DESFRUTADOR</h3>
+      </div>
+
+      <div class="desfrutador-grid">
+        <label class="desf-card" id="desf-card-banda">
+          <span>Activar banda transportadora</span>
+          <input type="checkbox" id="desf-banda" class="persist-field" onchange="toggleDesfCard('banda')">
+        </label>
+        <label class="desf-card" id="desf-card-sinfin">
+          <span>Activar tornillo sinfín</span>
+          <input type="checkbox" id="desf-sinfin" class="persist-field" onchange="toggleDesfCard('sinfin')">
+        </label>
+        <label class="desf-card" id="desf-card-desfrutadora">
+          <span>Activar desfrutadora</span>
+          <input type="checkbox" id="desf-desfrutadora" class="persist-field" onchange="toggleDesfCard('desfrutadora')">
+        </label>
+        <label class="desf-card" id="desf-card-elevador">
+          <span>Activar elevador de frutos</span>
+          <input type="checkbox" id="desf-elevador" class="persist-field" onchange="toggleDesfCard('elevador')">
+        </label>
+      </div>
+    </div>
+
+    <!-- 6. Observaciones -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Observaciones</h3>
+      </div>
+      <div class="form-group">
+        <label for="observaciones">Observaciones generales del proceso</label>
+        <textarea id="observaciones" class="persist-field" placeholder="Escriba aquí las observaciones del turno o proceso..."></textarea>
+      </div>
+    </div>
+
+    <!-- Acciones principales -->
+    <div class="actions-bar">
+      <button type="button" class="btn" onclick="saveDigestion()">Guardar registro</button>
+    </div>
+
+    <!-- Panel de estado -->
+    <div id="feedbackPanel" class="feedback-panel"></div>
+
+  </div>
+
+  <!-- Modal Guardando -->
+  <div class="modal-overlay" id="syncModal">
+    <div class="modal-card">
+      <div class="spinner"></div>
+      <h3 style="color: var(--primary-blue); margin-bottom: 0.5rem;" id="syncModalTitle">Guardando registro...</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;" id="syncModalText">Enviando filas a Disgestion y prensado.xlsx...</p>
+    </div>
+  </div>
+
+  <script>
+    // Pegue aquí la URL HTTP POST de su flujo de Power Automate para 'Disgestion y prensado.xlsx' (Hoja1):
+    const SHAREPOINT_DIGESTION_FLOW_URL = "https://default6f0898866713470696445eefd6431b.6b.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/21/workflows/50d5a1e715984ba9b4b7facd9a39e48e/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=TFP4UyzPoGZbkrjWJBxk4ORxSJpuy1s5bkdslM9Z32M";
+
+    const STORAGE_KEY_DI01 = "palmatec_di01_draft_v4";
+    const STORAGE_HIST_DI01 = "palmatec_di01_history_v4";
+
+    const INITIAL_PARO_ROWS = 1;
+
+    function getTodayISO() {
+      const d = new Date();
+      return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    }
+
+    function getNowHHMM() {
+      const d = new Date();
+      return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+    }
+
+    function setInputNow(inputId) {
+      const el = document.getElementById(inputId);
+      if (!el) return;
+      el.value = getNowHHMM();
+      syncDraft();
+    }
+
+    function toggleDesfCard(key) {
+      const chk = document.getElementById(`desf-${key}`);
+      const card = document.getElementById(`desf-card-${key}`);
+      if (chk && card) {
+        card.classList.toggle("active", chk.checked);
+      }
+      syncDraft();
+    }
+
+    function createHourlyRowElement(data = {}) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="hora-cell"><input type="time" data-hcol="hora" value="${data.hora || ""}"></td>
+        <td><input type="number" step="0.1" data-hcol="temp_digestor" value="${data.temp_digestor || ""}" placeholder="°C"></td>
+        <td><input type="text" data-hcol="dilucion_ac" value="${data.dilucion_ac || ""}" placeholder=""></td>
+        <td><input type="text" data-hcol="dilucion_iliv" value="${data.dilucion_iliv || ""}" placeholder=""></td>
+        <td><input type="text" data-hcol="dilucion_agua" value="${data.dilucion_agua || ""}" placeholder=""></td>
+        <td><input type="text" data-hcol="dilucion_lpes" value="${data.dilucion_lpes || ""}" placeholder=""></td>
+        <td><input type="number" step="0.1" data-hcol="amperios" value="${data.amperios || ""}" placeholder="A"></td>
+        <td><input type="number" step="0.1" data-hcol="presion_hidraulica" value="${data.presion_hidraulica || ""}" placeholder="PSI"></td>
+        <td><input type="number" step="0.1" data-hcol="nivel_aceite_hidraulico" value="${data.nivel_aceite_hidraulico || ""}" placeholder="L"></td>
+        <td><input type="text" data-hcol="nivel_llenado_digestor" value="${data.nivel_llenado_digestor || ""}" placeholder=""></td>
+        <td><button type="button" class="btn-danger-sm" onclick="removeHourlyRow(this)" title="Eliminar línea">✕</button></td>
+      `;
+
+      tr.querySelectorAll("input").forEach(inp => {
+        inp.addEventListener("input", syncDraft);
+        inp.addEventListener("change", syncDraft);
+      });
+      return tr;
+    }
+
+    function addHourlyRow(data = {}) {
+      const tbody = document.getElementById("hourlyTableBody");
+      tbody.appendChild(createHourlyRowElement(data));
+      syncDraft();
+    }
+
+    function removeHourlyRow(btn) {
+      const tbody = document.getElementById("hourlyTableBody");
+      if (tbody.querySelectorAll("tr").length <= 1) {
+        alert("Debe quedar al menos una línea.");
+        return;
+      }
+      btn.closest("tr").remove();
+      syncDraft();
+    }
+
+    function populateDefaultHourlyRows(rowsData = null) {
+      const tbody = document.getElementById("hourlyTableBody");
+      tbody.innerHTML = "";
+
+      if (Array.isArray(rowsData) && rowsData.length > 0) {
+        rowsData.forEach(hObj => tbody.appendChild(createHourlyRowElement(hObj)));
+        return;
+      }
+
+      tbody.appendChild(createHourlyRowElement({ hora: "06:00" }));
+    }
+
+    function createParoRowElement(data = {}) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><input type="time" data-pcol="inicio_proceso" value="${data.inicio_proceso || ""}"></td>
+        <td><input type="time" data-pcol="fin_proceso" value="${data.fin_proceso || ""}"></td>
+        <td><input type="text" data-pcol="motivo_paro" value="${data.motivo_paro || ""}" placeholder="Detalle el motivo del tiempo de paro"></td>
+        <td><button type="button" class="btn-danger-sm" onclick="removeParoRow(this)" title="Eliminar línea">✕</button></td>
+      `;
+
+      tr.querySelectorAll("input").forEach(inp => {
+        inp.addEventListener("input", syncDraft);
+        inp.addEventListener("change", syncDraft);
+      });
+      return tr;
+    }
+
+    function addParoRow(data = {}) {
+      const tbody = document.getElementById("paroTableBody");
+      tbody.appendChild(createParoRowElement(data));
+      syncDraft();
+    }
+
+    function removeParoRow(btn) {
+      const tbody = document.getElementById("paroTableBody");
+      if (tbody.querySelectorAll("tr").length <= 1) {
+        alert("Debe quedar al menos una línea.");
+        return;
+      }
+      btn.closest("tr").remove();
+      syncDraft();
+    }
+
+    function collectFormData() {
+      const horasData = [];
+      document.querySelectorAll("#hourlyTableBody tr").forEach(tr => {
+        const getH = col => tr.querySelector(`[data-hcol="${col}"]`).value.trim();
+        horasData.push({
+          hora: getH("hora"),
+          temp_digestor: getH("temp_digestor"),
+          dilucion_ac: getH("dilucion_ac"),
+          dilucion_iliv: getH("dilucion_iliv"),
+          dilucion_agua: getH("dilucion_agua"),
+          dilucion_lpes: getH("dilucion_lpes"),
+          amperios: getH("amperios"),
+          presion_hidraulica: getH("presion_hidraulica"),
+          nivel_aceite_hidraulico: getH("nivel_aceite_hidraulico"),
+          nivel_llenado_digestor: getH("nivel_llenado_digestor")
+        });
+      });
+
+      const paroData = [];
+      document.querySelectorAll("#paroTableBody tr").forEach(tr => {
+        const getP = col => tr.querySelector(`[data-pcol="${col}"]`).value.trim();
+        paroData.push({
+          inicio_proceso: getP("inicio_proceso"),
+          fin_proceso: getP("fin_proceso"),
+          motivo_paro: getP("motivo_paro")
+        });
+      });
+
+      return {
+        codigo: "FR-IN-PA-DI-01",
+        fecha: document.getElementById("fecha").value,
+        hora: document.getElementById("hora").value,
+        turno: document.getElementById("turno").value,
+        operador: document.getElementById("operador").value.trim(),
+        registro_horario: horasData,
+        tiempo_paro: paroData,
+        lectura_horimetro: {
+          inicio: document.getElementById("horimetroInicio").value.trim(),
+          final: document.getElementById("horimetroFinal").value.trim(),
+          h_produccion: document.getElementById("horimetroProduccion").value.trim(),
+          h_paro: document.getElementById("horimetroParo").value.trim()
+        },
+        operacion_desfrutador: {
+          activar_banda_transportadora: document.getElementById("desf-banda").checked,
+          activar_tornillo_sinfin: document.getElementById("desf-sinfin").checked,
+          activar_desfrutadora: document.getElementById("desf-desfrutadora").checked,
+          activar_elevador_frutos: document.getElementById("desf-elevador").checked
+        },
+        observaciones: document.getElementById("observaciones").value.trim()
+      };
+    }
+
+    // Construye las filas mapeadas exactamente a las 27 columnas de 'Disgestion y prensado.xlsx' (Hoja1)
+    function buildExcelRows(startId) {
+      const fecha = document.getElementById("fecha").value;
+      const turno = document.getElementById("turno").value;
+      const operador = document.getElementById("operador").value.trim();
+      const horaEncabezado = document.getElementById("hora").value;
+
+      const paroRows = [];
+      document.querySelectorAll("#paroTableBody tr").forEach(tr => {
+        const getP = col => tr.querySelector(`[data-pcol="${col}"]`).value.trim();
+        const pObj = {
+          inicio_proceso: getP("inicio_proceso"),
+          fin_proceso: getP("fin_proceso"),
+          motivo_paro: getP("motivo_paro")
+        };
+        if (Object.values(pObj).some(v => v !== "")) paroRows.push(pObj);
+      });
+      const firstParo = paroRows[0] || { inicio_proceso: "", fin_proceso: "", motivo_paro: "" };
+
+      const hInicio = document.getElementById("horimetroInicio").value.trim();
+      const hFinal = document.getElementById("horimetroFinal").value.trim();
+      const hProduccion = document.getElementById("horimetroProduccion").value.trim();
+      const hParo = document.getElementById("horimetroParo").value.trim();
+
+      const actBanda = document.getElementById("desf-banda").checked ? "Si" : "No";
+      const actSinfin = document.getElementById("desf-sinfin").checked ? "Si" : "No";
+      const actDesfr = document.getElementById("desf-desfrutadora").checked ? "Si" : "No";
+      const actElev = document.getElementById("desf-elevador").checked ? "Si" : "No";
+
+      const observaciones = document.getElementById("observaciones").value.trim();
+
+      const activeHourly = [];
+      document.querySelectorAll("#hourlyTableBody tr").forEach(tr => {
+        const getH = col => tr.querySelector(`[data-hcol="${col}"]`).value.trim();
+        const hObj = {
+          hora_t: getH("hora"),
+          temp_digestor: getH("temp_digestor"),
+          ac: getH("dilucion_ac"),
+          i_liv: getH("dilucion_iliv"),
+          agua: getH("dilucion_agua"),
+          l_pes: getH("dilucion_lpes"),
+          amperios: getH("amperios"),
+          presion_hidraulica: getH("presion_hidraulica"),
+          nivel_aceite: getH("nivel_aceite_hidraulico"),
+          nivel_llenado: getH("nivel_llenado_digestor")
+        };
+        const hasAny = Object.values(hObj).some(v => v !== "");
+        if (hasAny) activeHourly.push(hObj);
+      });
+
+      const rowsToEmit = activeHourly.length > 0 ? activeHourly : [{
+        hora_t: "",
+        temp_digestor: "",
+        ac: "",
+        i_liv: "",
+        agua: "",
+        l_pes: "",
+        amperios: "",
+        presion_hidraulica: "",
+        nivel_aceite: "",
+        nivel_llenado: ""
+      }];
+
+      return rowsToEmit.map((r, idx) => {
+        const pRow = paroRows[idx] || firstParo;
+        return {
+          Id: startId + idx,
+          Fecha: fecha,
+          Turno: turno,
+          Operador: operador,
+          Hora: horaEncabezado,
+          "Hora(t)": r.hora_t,
+          Temperatura_digestor: r.temp_digestor,
+          Ac: r.ac,
+          "I-liv": r.i_liv,
+          Agua: r.agua,
+          "L.pes": r.l_pes,
+          Control_amperios: r.amperios,
+          Control_presion_hidraulica: r.presion_hidraulica,
+          Nivel_aceite_hidraulico: r.nivel_aceite,
+          Nivel_llenado_digestor: r.nivel_llenado,
+          Inicio_proceso: pRow.inicio_proceso,
+          Fin_proceso: pRow.fin_proceso,
+          Detalle_motivo_tiempo_paro: pRow.motivo_paro,
+          Inicio: hInicio,
+          Final: hFinal,
+          "H/produccion": hProduccion,
+          "h/paro": hParo,
+          "Act.Banda_trasportadora": actBanda,
+          "Act.tornillo_sinfin": actSinfin,
+          "Act.desfrutadora": actDesfr,
+          Act_elevador_frutos: actElev,
+          Observaciones: observaciones
+        };
+      });
+    }
+
+    function syncDraft() {
+      const state = collectFormData();
+      localStorage.setItem(STORAGE_KEY_DI01, JSON.stringify(state));
+      const asEl = document.getElementById("autosaveStatus");
+      if (asEl) asEl.textContent = `Borrador guardado (${getNowHHMM()})`;
+    }
+
+    function loadDraft() {
+      const paroBody = document.getElementById("paroTableBody");
+      paroBody.innerHTML = "";
+
+      const raw = localStorage.getItem(STORAGE_KEY_DI01);
+      if (!raw) {
+        document.getElementById("fecha").value = getTodayISO();
+        document.getElementById("turno").value = "1";
+        populateDefaultHourlyRows();
+        for (let i = 0; i < INITIAL_PARO_ROWS; i++) {
+          paroBody.appendChild(createParoRowElement());
+        }
+        return;
+      }
+
+      const d = JSON.parse(raw);
+      document.getElementById("fecha").value = d.fecha || getTodayISO();
+      document.getElementById("hora").value = d.hora || "";
+      document.getElementById("turno").value = d.turno || "1";
+      document.getElementById("operador").value = d.operador || "";
+
+      populateDefaultHourlyRows(Array.isArray(d.registro_horario) ? d.registro_horario : null);
+
+      const rawParo = Array.isArray(d.tiempo_paro) ? d.tiempo_paro : [];
+      const pRows = rawParo.length > 0
+        ? rawParo
+        : Array.from({ length: INITIAL_PARO_ROWS }, () => ({}));
+      pRows.forEach(pObj => paroBody.appendChild(createParoRowElement(pObj)));
+
+      const horo = d.lectura_horimetro || {};
+      document.getElementById("horimetroInicio").value = horo.inicio || "";
+      document.getElementById("horimetroFinal").value = horo.final || "";
+      document.getElementById("horimetroProduccion").value = horo.h_produccion || "";
+      document.getElementById("horimetroParo").value = horo.h_paro || "";
+
+      if (d.operacion_desfrutador) {
+        const map = {
+          banda: "activar_banda_transportadora",
+          sinfin: "activar_tornillo_sinfin",
+          desfrutadora: "activar_desfrutadora",
+          elevador: "activar_elevador_frutos"
+        };
+        Object.entries(map).forEach(([k, prop]) => {
+          const chk = document.getElementById(`desf-${k}`);
+          const card = document.getElementById(`desf-card-${k}`);
+          const val = !!d.operacion_desfrutador[prop];
+          if (chk) chk.checked = val;
+          if (card) card.classList.toggle("active", val);
+        });
+      }
+
+      document.getElementById("observaciones").value = d.observaciones || "";
+    }
+
+    document.querySelectorAll(".persist-field").forEach(el => {
+      el.addEventListener("input", syncDraft);
+      el.addEventListener("change", syncDraft);
+    });
+
+    function clearHeaderFields() {
+      if (!confirm("¿Limpiar jornada (fecha, hora, turno y operador)?")) return;
+      document.getElementById("fecha").value = getTodayISO();
+      document.getElementById("hora").value = "";
+      document.getElementById("turno").value = "1";
+      document.getElementById("operador").value = "";
+      syncDraft();
+    }
+
+    function showSyncModal(title, text) {
+      document.getElementById("syncModalTitle").textContent = title;
+      document.getElementById("syncModalText").textContent = text;
+      document.getElementById("syncModal").style.display = "flex";
+    }
+
+    function hideSyncModal() {
+      document.getElementById("syncModal").style.display = "none";
+    }
+
+    function showFeedback(msg, isWarning = false) {
+      const panel = document.getElementById("feedbackPanel");
+      panel.style.display = "block";
+      panel.className = isWarning ? "feedback-panel warn" : "feedback-panel";
+      panel.textContent = msg;
+    }
+
+    function resetFormAfterSave() {
+      document.getElementById("fecha").value = getTodayISO();
+      document.getElementById("hora").value = "";
+      document.getElementById("turno").value = "1";
+      document.getElementById("operador").value = "";
+
+      populateDefaultHourlyRows();
+
+      const paroBody = document.getElementById("paroTableBody");
+      paroBody.innerHTML = "";
+      for (let i = 0; i < INITIAL_PARO_ROWS; i++) {
+        paroBody.appendChild(createParoRowElement());
+      }
+
+      document.getElementById("horimetroInicio").value = "";
+      document.getElementById("horimetroFinal").value = "";
+      document.getElementById("horimetroProduccion").value = "";
+      document.getElementById("horimetroParo").value = "";
+
+      ["banda", "sinfin", "desfrutadora", "elevador"].forEach(k => {
+        const chk = document.getElementById(`desf-${k}`);
+        const card = document.getElementById(`desf-card-${k}`);
+        if (chk) chk.checked = false;
+        if (card) card.classList.remove("active");
+      });
+
+      document.getElementById("observaciones").value = "";
+      localStorage.removeItem(STORAGE_KEY_DI01);
+      const asEl = document.getElementById("autosaveStatus");
+      if (asEl) asEl.textContent = `Formulario limpio (${getNowHHMM()})`;
+    }
+
+    async function sendRowsToFlow(rowsPayload) {
+      if (!SHAREPOINT_DIGESTION_FLOW_URL || SHAREPOINT_DIGESTION_FLOW_URL.trim() === "") {
+        return { synced: false, configured: false };
+      }
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+      try {
+        const res = await fetch(SHAREPOINT_DIGESTION_FLOW_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            archivo: "Disgestion y prensado.xlsx",
+            hoja: "Hoja1",
+            filas: rowsPayload,
+            ...(rowsPayload[0] || {})
+          }),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return { synced: true, configured: true };
+      } catch (err) {
+        clearTimeout(timeoutId);
+        if (err.name === "AbortError") {
+          throw new Error("Tiempo de espera agotado al contactar Power Automate");
+        }
+        if (err instanceof TypeError) {
+          throw new Error("Bloqueo CORS o de red al llamar a Power Automate");
+        }
+        throw err;
+      }
+    }
+
+    async function saveDigestion() {
+      const fecha = document.getElementById("fecha").value;
+      if (!fecha) {
+        alert("Por favor ingrese la Fecha.");
+        document.getElementById("fecha").focus();
+        return;
+      }
+
+      const history = JSON.parse(localStorage.getItem(STORAGE_HIST_DI01) || "[]");
+      const nextId = history.length + 1;
+      const excelRows = buildExcelRows(nextId);
+
+      showSyncModal("Guardando registro...", `Preparando ${excelRows.length} fila(s) para Disgestion y prensado.xlsx...`);
+
+      let msg = "";
+      let isWarn = false;
+      let shouldClear = false;
+
+      try {
+        const flowRes = await sendRowsToFlow(excelRows);
+        if (!flowRes.configured) {
+          msg = `¡REGISTRO #${nextId} GUARDADO LOCALMENTE! (${excelRows.length} fila(s) listas para 'Disgestion y prensado.xlsx' [Hoja1] | Fecha: ${fecha} | Turno: ${document.getElementById("turno").value})`;
+        } else {
+          msg = `¡REGISTRO #${nextId} GUARDADO! (${excelRows.length} fila(s) enviadas a 'Disgestion y prensado.xlsx' [Hoja1]).`;
+        }
+        shouldClear = true;
+      } catch (err) {
+        isWarn = true;
+        msg = `Guardado localmente (#${nextId}), pero hubo un error al enviar (${err.message}).`;
+      } finally {
+        history.unshift({ id: nextId, fecha, filas: excelRows });
+        localStorage.setItem(STORAGE_HIST_DI01, JSON.stringify(history));
+        if (shouldClear) {
+          resetFormAfterSave();
+        }
+        hideSyncModal();
+        showFeedback(msg, isWarn);
+      }
+    }
+
+    loadDraft();
+  </script>
+</body>
+</html>
