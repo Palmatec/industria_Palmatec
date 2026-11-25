@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control de Proceso de Esterilización (FR-IN-PA-ES-01) - Palmatec</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-blue: #004085;
+      --primary-dark: #002752;
+      --accent-green: #76BC21;
+      --accent-green-hover: #619c1b;
+      --bg-light: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-dark: #1E293B;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+      --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.08);
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    header {
+      background: #fff;
+      padding: 1.1rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header img {
+      height: 48px;
+      object-fit: contain;
+    }
+    .logo-fallback {
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--primary-blue);
+      letter-spacing: 0.5px;
+      display: none;
+      align-items: center;
+    }
+    .header-title {
+      font-size: 1.1rem;
+      color: var(--primary-blue);
+      font-weight: 600;
+    }
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .doc-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      background: #F1F5F9;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+    .autosave-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.8rem;
+      color: #15803D;
+      background: #DCFCE7;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .hero-banner-container {
+      width: 100%;
+      height: 220px;
+      position: relative;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-pattern {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.6;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: #fff;
+      padding: 0 1.5rem;
+    }
+    .hero-content h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .main-container {
+      max-width: 1380px;
+      margin: -2.2rem auto 4rem;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 1.75rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+    }
+    .card-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .card h3 {
+      color: var(--primary-blue);
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .turno-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      gap: 1rem;
+    }
+
+    .sterilizers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.75rem;
+    }
+    @media (max-width: 1024px) {
+      .sterilizers-grid { grid-template-columns: 1fr; }
+    }
+
+    .stage-box {
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .stage-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 0.75rem;
+    }
+
+    .fields-row-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+    .fields-row-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+    @media (max-width: 560px) {
+      .fields-row-3, .fields-row-2 { grid-template-columns: 1fr; }
+    }
+
+    .form-group { margin-bottom: 0; }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.8rem;
+      margin-bottom: 0.35rem;
+      color: var(--text-dark);
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      background-color: #FFFFFF;
+      color: var(--text-dark);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(0, 64, 133, 0.15);
+    }
+
+    .time-input-wrap {
+      display: flex;
+      gap: 4px;
+    }
+    .btn-now {
+      background: #EFF6FF;
+      color: var(--primary-blue);
+      border: 1px solid #BFDBFE;
+      border-radius: 6px;
+      padding: 0 9px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .btn-now:hover {
+      background: #DBEAFE;
+    }
+
+    .btn {
+      background-color: var(--accent-green);
+      color: #FFFFFF;
+      font-weight: 600;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .btn:hover { background-color: var(--accent-green-hover); }
+    .btn-block { width: 100%; }
+    .btn-secondary { background-color: #64748B; color: #fff; }
+    .btn-secondary:hover { background-color: #475569; }
+    .btn-info { background-color: #0284C7; color: #fff; padding: 6px 10px; font-size: 0.78rem; }
+    .btn-info:hover { background-color: #0369A1; }
+    .btn-warning { background-color: #F59E0B; color: #fff; padding: 6px 10px; font-size: 0.78rem; }
+    .btn-warning:hover { background-color: #D97706; }
+    .btn-danger { background-color: #EF4444; color: #fff; padding: 6px 10px; font-size: 0.78rem; }
+    .btn-danger:hover { background-color: #DC2626; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .status-idle { background: #F1F5F9; color: var(--text-muted); }
+    .status-running { background: #FEF3C7; color: #B45309; }
+    .badge-est {
+      display: inline-flex;
+      align-items: center;
+      background: #EFF6FF;
+      color: #1D4ED8;
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .badge-sync-ok {
+      display: inline-flex;
+      align-items: center;
+      background: #DCFCE7;
+      color: #15803D;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.74rem;
+      font-weight: 600;
+    }
+    .badge-sync-pend {
+      display: inline-flex;
+      align-items: center;
+      background: #FEF3C7;
+      color: #B45309;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.74rem;
+      font-weight: 600;
+    }
+
+    .table-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .toolbar-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .search-box {
+      min-width: 260px;
+    }
+    .search-box input {
+      background-color: #F8FAFC;
+    }
+    .table-responsive { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.86rem; }
+    th {
+      background: #F1F5F9;
+      color: var(--text-dark);
+      padding: 11px 12px;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border-color);
+      white-space: nowrap;
+    }
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    tr:hover td {
+      background-color: #F8FAFC;
+      color: var(--text-dark);
+    }
+
+    .feedback-panel {
+      margin-top: 0;
+      background: #0F172A;
+      color: #4ADE80;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.82rem;
+      display: none;
+      border: 1px solid #22C55E;
+      white-space: pre-wrap;
+    }
+    .feedback-panel.warn {
+      color: #FBBF24;
+      border-color: #F59E0B;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .modal-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 680px;
+      box-shadow: var(--shadow-lg);
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .modal-close:hover { color: var(--text-dark); }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 1rem;
+    }
+    .detail-item {
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+    }
+    .detail-item span {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-blue);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <img src="https://wppalmatec.azurewebsites.net/wp-content/uploads/2022/07/1-palmateclogo.png" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+      <div id="logoFallback" class="logo-fallback">PALMATEC</div>
+      <div class="header-title">Control del Proceso de Esterilización</div>
+    </div>
+
+    <div class="header-badges">
+      <div class="autosave-badge" id="autosaveStatus">Borrador sincronizado</div>
+      <div class="doc-badge">
+        <span><strong>Código:</strong> FR-IN-PA-ES-01 | <strong>Versión:</strong> 4 | <strong>Aprobado:</strong> J.Gamboa</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero-banner-container">
+    <div class="hero-pattern"></div>
+    <div class="hero-content">
+      <h1>Control del Proceso de Esterilización</h1>
+    </div>
+  </section>
+
+  <div class="main-container">
+
+    <!-- Datos de Jornada y Turno -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Datos de la Jornada y Operador de Turno</h3>
+      </div>
+
+      <div class="turno-grid">
+        <div class="form-group">
+          <label for="fecha">Fecha *</label>
+          <input type="date" id="fecha" class="turno-field" required>
+        </div>
+        <div class="form-group">
+          <label for="horaInicio">Hora inicio</label>
+          <input type="time" id="horaInicio" class="turno-field">
+        </div>
+        <div class="form-group">
+          <label for="horaFinal">Hora final</label>
+          <input type="time" id="horaFinal" class="turno-field">
+        </div>
+        <div class="form-group">
+          <label for="totalEsterilizadores">Total de Esterilizadores</label>
+          <input type="number" id="totalEsterilizadores" class="turno-field" min="1" value="2">
+        </div>
+        <div class="form-group">
+          <label for="turno">Turno</label>
+          <select id="turno" class="turno-field">
+            <option value="Turno 1">Turno 1</option>
+            <option value="Turno 2">Turno 2</option>
+            <option value="Turno 3">Turno 3</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="operador">Operador</label>
+          <input type="text" id="operador" class="turno-field" placeholder="Nombre del operador">
+        </div>
+      </div>
+    </div>
+
+    <!-- Dos Esterilizadores Independientes en Paralelo -->
+    <div class="sterilizers-grid" id="sterilizersContainer"></div>
+
+    <!-- Panel de estado de guardado / SharePoint -->
+    <div id="feedbackPanel" class="feedback-panel"></div>
+
+    <!-- Historial de Ciclos -->
+    <div class="card">
+      <div class="table-toolbar">
+        <h3>Ciclos Guardados</h3>
+        <div class="toolbar-actions">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Buscar por fecha, turno, esterilizador u operador..." onkeyup="renderTable()">
+          </div>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Turno</th>
+              <th>Operador</th>
+              <th>Esterilizador</th>
+              <th>Llenado RFF</th>
+              <th>Inicio - Final Ciclo</th>
+              <th>Desaireación (S / Bar)</th>
+              <th>1er Pico (S / Bar)</th>
+              <th>2do Pico (S / Bar)</th>
+              <th>Sostenim. (S / Bar)</th>
+              <th>Total Est. (Min)</th>
+              <th>Descarga RFF</th>
+              <th>SharePoint</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal Detalle -->
+  <div class="modal-overlay" id="cycleModal">
+    <div class="modal-card">
+      <span class="modal-close" onclick="closeCycleModal()">&times;</span>
+      <h3 style="color: var(--primary-blue);">Detalle del Ciclo Registrado</h3>
+      <p id="modalSubtitle" style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px;"></p>
+      <div class="detail-grid" id="modalDetailGrid"></div>
+    </div>
+  </div>
+
+  <!-- Modal Guardando en SharePoint -->
+  <div class="modal-overlay" id="syncModal">
+    <div class="modal-card" style="max-width: 410px; text-align: center;">
+      <div class="spinner"></div>
+      <h3 style="color: var(--primary-blue); margin-bottom: 0.5rem;" id="syncModalTitle">Guardando en Excel...</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;" id="syncModalText">Enviando fila a la tabla Esterilizacion en SharePoint...</p>
+    </div>
+  </div>
+
+  <script>
+    // PEGUE AQUÍ LA URL HTTP POST DE SU FLUJO DE POWER AUTOMATE CONECTADO A LA TABLA "Esterilizacion"
+    const SHAREPOINT_EXCEL_FLOW_URL = "https://default6f0898866713470696445eefd6431b.6b.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/03/workflows/8b9a3d233abd46aab119817453e07dde/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=4f7g5Lbs0Bq60AwHjTXa2lvhJMTdMS0z-X7B-xicJUA";
+
+    const STORAGE_DRAFTS = "palmatec_es01_sp_drafts_v4";
+    const STORAGE_HISTORY = "palmatec_es01_sp_history_v4";
+
+    const EST_FIELDS = [
+      "Tiempo_llenado_inicio", "Tiempo_llenado_final", "Tiempo_llenado_tiempo",
+      "Inicio_ciclo_esterilizacion",
+      "Desaireacion_tiempo", "Desaireacion_presion",
+      "Primer_pico_tiempo", "Primer_pico_presion",
+      "Segundo_pico_tiempo", "Segundo_pico_presion",
+      "Sostenimiento_tiempo", "Sostenimiento_presion",
+      "Final_ciclo_esterilizacion", "Tiempo_ciclo_esterilizacion",
+      "Tiempo_descarga_inicio", "Tiempo_descarga_final", "Tiempo_descarga_tiempo",
+      "Observaciones"
+    ];
+
+    function getNowHHMM() {
+      const d = new Date();
+      return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+    }
+
+    function getTodayISO() {
+      const d = new Date();
+      return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    }
+
+    function calcMinutes(startStr, endStr) {
+      if (!startStr || !endStr) return "";
+      const [sh, sm] = startStr.split(":").map(Number);
+      const [eh, em] = endStr.split(":").map(Number);
+      let diff = (eh * 60 + em) - (sh * 60 + sm);
+      if (diff < 0) diff += 1440;
+      return diff;
+    }
+
+    function buildSterilizerCard(num) {
+      return `
+        <div class="card" data-est="${num}">
+          <div class="card-header-flex">
+            <h3>ESTERILIZADOR Nº ${num}</h3>
+            <span class="status-badge status-idle" id="status-est-${num}">Disponible</span>
+          </div>
+
+          <div class="stage-box">
+            <div class="stage-title">Tiempo Llenado de RFF</div>
+            <div class="fields-row-3">
+              <div class="form-group">
+                <label>Inicio</label>
+                <div class="time-input-wrap">
+                  <input type="time" data-field="Tiempo_llenado_inicio">
+                  <button type="button" class="btn-now" onclick="setNow(${num}, 'Tiempo_llenado_inicio')">Ahora</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Final</label>
+                <div class="time-input-wrap">
+                  <input type="time" data-field="Tiempo_llenado_final">
+                  <button type="button" class="btn-now" onclick="setNow(${num}, 'Tiempo_llenado_final')">Ahora</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Tiempo (Min)</label>
+                <input type="number" step="0.1" data-field="Tiempo_llenado_tiempo" placeholder="Min">
+              </div>
+            </div>
+          </div>
+
+          <div class="stage-box">
+            <div class="stage-title">Ciclo de Esterilización</div>
+
+            <div class="fields-row-2" style="margin-bottom: 0.75rem;">
+              <div class="form-group">
+                <label>Inicio del Ciclo de Esterilización</label>
+                <div class="time-input-wrap">
+                  <input type="time" data-field="Inicio_ciclo_esterilizacion">
+                  <button type="button" class="btn-now" onclick="setNow(${num}, 'Inicio_ciclo_esterilizacion')">Ahora</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="fields-row-2" style="margin-bottom: 0.75rem;">
+              <div class="form-group">
+                <label>Desaireación — Tiempo (S)</label>
+                <input type="number" step="1" data-field="Desaireacion_tiempo" placeholder="Tiempo (S)">
+              </div>
+              <div class="form-group">
+                <label>Desaireación — Presión (Bar)</label>
+                <input type="number" step="0.01" data-field="Desaireacion_presion" placeholder="Presión (Bar)">
+              </div>
+            </div>
+
+            <div class="fields-row-2" style="margin-bottom: 0.75rem;">
+              <div class="form-group">
+                <label>Primer Pico — Tiempo (S)</label>
+                <input type="number" step="1" data-field="Primer_pico_tiempo" placeholder="Tiempo (S)">
+              </div>
+              <div class="form-group">
+                <label>Primer Pico — Presión (Bar)</label>
+                <input type="number" step="0.01" data-field="Primer_pico_presion" placeholder="Presión (Bar)">
+              </div>
+            </div>
+
+            <div class="fields-row-2" style="margin-bottom: 0.75rem;">
+              <div class="form-group">
+                <label>Segundo Pico — Tiempo (S)</label>
+                <input type="number" step="1" data-field="Segundo_pico_tiempo" placeholder="Tiempo (S)">
+              </div>
+              <div class="form-group">
+                <label>Segundo Pico — Presión (Bar)</label>
+                <input type="number" step="0.01" data-field="Segundo_pico_presion" placeholder="Presión (Bar)">
+              </div>
+            </div>
+
+            <div class="fields-row-2" style="margin-bottom: 0.75rem;">
+              <div class="form-group">
+                <label>Sostenimiento — Tiempo (S)</label>
+                <input type="number" step="1" data-field="Sostenimiento_tiempo" placeholder="Tiempo (S)">
+              </div>
+              <div class="form-group">
+                <label>Sostenimiento — Presión (Bar)</label>
+                <input type="number" step="0.01" data-field="Sostenimiento_presion" placeholder="Presión (Bar)">
+              </div>
+            </div>
+
+            <div class="fields-row-2">
+              <div class="form-group">
+                <label>Final del Ciclo de Esterilización</label>
+                <div class="time-input-wrap">
+                  <input type="time" data-field="Final_ciclo_esterilizacion">
+                  <button type="button" class="btn-now" onclick="setNow(${num}, 'Final_ciclo_esterilizacion')">Ahora</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Tiempo Total de Esterilización (Min)</label>
+                <input type="number" step="0.1" data-field="Tiempo_ciclo_esterilizacion" placeholder="Automático (Inicio - Final)" readonly style="background-color: #F1F5F9; font-weight: 600;">
+              </div>
+            </div>
+          </div>
+
+          <div class="stage-box">
+            <div class="stage-title">Tiempo Descarga de RFF</div>
+            <div class="fields-row-3">
+              <div class="form-group">
+                <label>Inicio</label>
+                <div class="time-input-wrap">
+                  <input type="time" data-field="Tiempo_descarga_inicio">
+                  <button type="button" class="btn-now" onclick="setNow(${num}, 'Tiempo_descarga_inicio')">Ahora</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Final</label>
+                <div class="time-input-wrap">
+                  <input type="time" data-field="Tiempo_descarga_final">
+                  <button type="button" class="btn-now" onclick="setNow(${num}, 'Tiempo_descarga_final')">Ahora</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Tiempo (Min)</label>
+                <input type="number" step="0.1" data-field="Tiempo_descarga_tiempo" placeholder="Tiempo (Min)">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.1rem;">
+            <label>Observaciones — Esterilizador Nº ${num}</label>
+            <textarea rows="2" data-field="Observaciones" placeholder="Observaciones del ciclo..."></textarea>
+          </div>
+
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-block" style="flex: 1;" onclick="saveCycle(${num})">
+              Guardar (Est. Nº ${num})
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="clearSterilizer(${num})">
+              Limpiar
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    document.getElementById("sterilizersContainer").innerHTML =
+      buildSterilizerCard(1) + buildSterilizerCard(2);
+
+    function setNow(estNum, fieldName) {
+      const card = document.querySelector(`.card[data-est="${estNum}"]`);
+      const input = card.querySelector(`[data-field="${fieldName}"]`);
+      input.value = getNowHHMM();
+      recalcCardTimes(card);
+      syncDrafts();
+    }
+
+    function recalcCardTimes(card) {
+      const f = name => card.querySelector(`[data-field="${name}"]`);
+      const lMin = calcMinutes(f("Tiempo_llenado_inicio").value, f("Tiempo_llenado_final").value);
+      f("Tiempo_llenado_tiempo").value = lMin !== "" ? lMin : "";
+
+      const cMin = calcMinutes(f("Inicio_ciclo_esterilizacion").value, f("Final_ciclo_esterilizacion").value);
+      f("Tiempo_ciclo_esterilizacion").value = cMin !== "" ? cMin : "";
+
+      const dMin = calcMinutes(f("Tiempo_descarga_inicio").value, f("Tiempo_descarga_final").value);
+      f("Tiempo_descarga_tiempo").value = dMin !== "" ? dMin : "";
+    }
+
+    function updateStatusPill(estNum) {
+      const card = document.querySelector(`.card[data-est="${estNum}"]`);
+      const pill = document.getElementById(`status-est-${estNum}`);
+      const hasContent = Array.from(card.querySelectorAll("[data-field]")).some(el => el.value.trim() !== "");
+      if (hasContent) {
+        pill.className = "status-badge status-running";
+        pill.textContent = "En proceso (autoguardado)";
+      } else {
+        pill.className = "status-badge status-idle";
+        pill.textContent = "Disponible";
+      }
+    }
+
+    function syncDrafts() {
+      const drafts = { turno: {}, est1: {}, est2: {} };
+      document.querySelectorAll(".turno-field").forEach(el => {
+        drafts.turno[el.id] = el.value;
+      });
+      [1, 2].forEach(num => {
+        const card = document.querySelector(`.card[data-est="${num}"]`);
+        card.querySelectorAll("[data-field]").forEach(el => {
+          drafts[`est${num}`][el.dataset.field] = el.value;
+        });
+        updateStatusPill(num);
+      });
+      localStorage.setItem(STORAGE_DRAFTS, JSON.stringify(drafts));
+      document.getElementById("autosaveStatus").textContent = `Borrador guardado (${getNowHHMM()})`;
+    }
+
+    function loadDrafts() {
+      const drafts = JSON.parse(localStorage.getItem(STORAGE_DRAFTS) || '{"turno":{},"est1":{},"est2":{}}');
+      if (!drafts.turno.fecha) drafts.turno.fecha = getTodayISO();
+      if (!drafts.turno.turno) drafts.turno.turno = "Turno 1";
+      document.querySelectorAll(".turno-field").forEach(el => {
+        if (drafts.turno[el.id] !== undefined) el.value = drafts.turno[el.id];
+      });
+      [1, 2].forEach(num => {
+        const card = document.querySelector(`.card[data-est="${num}"]`);
+        const estData = drafts[`est${num}`] || {};
+        card.querySelectorAll("[data-field]").forEach(el => {
+          if (estData[el.dataset.field] !== undefined) el.value = estData[el.dataset.field];
+        });
+        updateStatusPill(num);
+      });
+    }
+
+    document.querySelectorAll(".turno-field").forEach(el => {
+      el.addEventListener("input", syncDrafts);
+      el.addEventListener("change", syncDrafts);
+    });
+
+    document.querySelectorAll(".card[data-est]").forEach(card => {
+      card.querySelectorAll("[data-field]").forEach(el => {
+        el.addEventListener("input", () => {
+          recalcCardTimes(card);
+          syncDrafts();
+        });
+      });
+    });
+
+    function clearSterilizer(estNum) {
+      if (!confirm(`¿Limpiar únicamente los datos del Esterilizador Nº ${estNum}? El otro esterilizador conservará sus datos.`)) return;
+      const card = document.querySelector(`.card[data-est="${estNum}"]`);
+      card.querySelectorAll("[data-field]").forEach(el => el.value = "");
+      syncDrafts();
+    }
+
+    function showSyncModal(title, text) {
+      document.getElementById("syncModalTitle").textContent = title;
+      document.getElementById("syncModalText").textContent = text;
+      document.getElementById("syncModal").style.display = "flex";
+    }
+
+    function hideSyncModal() {
+      document.getElementById("syncModal").style.display = "none";
+    }
+
+    function showFeedback(msg, isWarning = false) {
+      const panel = document.getElementById("feedbackPanel");
+      panel.style.display = "block";
+      panel.className = isWarning ? "feedback-panel warn" : "feedback-panel";
+      panel.textContent = msg;
+    }
+
+    async function sendCycleToSharePoint(payloadExcel) {
+      if (!SHAREPOINT_EXCEL_FLOW_URL || SHAREPOINT_EXCEL_FLOW_URL.trim() === "") {
+        return {
+          synced: false,
+          reason: "Falta pegar la URL del flujo de Power Automate en SHAREPOINT_EXCEL_FLOW_URL."
+        };
+      }
+      const response = await fetch(SHAREPOINT_EXCEL_FLOW_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payloadExcel)
+      });
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`HTTP ${response.status}: ${errText}`);
+      }
+      return { synced: true };
+    }
+
+    async function saveCycle(estNum) {
+      const fecha = document.getElementById("fecha").value;
+      if (!fecha) {
+        alert("Por favor ingrese la Fecha en los datos de la jornada.");
+        document.getElementById("fecha").focus();
+        return;
+      }
+
+      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+      const nextId = history.length + 1;
+
+      const card = document.querySelector(`.card[data-est="${estNum}"]`);
+      const val = field => card.querySelector(`[data-field="${field}"]`).value.trim();
+
+      // Objeto con los nombres EXACTOS de las columnas de la tabla "Esterilizacion" en Excel
+      const excelRecord = {
+        Id: nextId,
+        Fecha: fecha,
+        Hora_inicio: document.getElementById("horaInicio").value,
+        Hora_final: document.getElementById("horaFinal").value,
+        Total_esterilizadores: document.getElementById("totalEsterilizadores").value,
+        Turno: document.getElementById("turno").value,
+        Operador: document.getElementById("operador").value.trim(),
+        Esterilizador: estNum,
+        Tiempo_llenado_inicio: val("Tiempo_llenado_inicio"),
+        Tiempo_llenado_final: val("Tiempo_llenado_final"),
+        Tiempo_llenado_tiempo: val("Tiempo_llenado_tiempo"),
+        Inicio_ciclo_esterilizacion: val("Inicio_ciclo_esterilizacion"),
+        Desaireacion_tiempo: val("Desaireacion_tiempo"),
+        Desaireacion_presion: val("Desaireacion_presion"),
+        Primer_pico_tiempo: val("Primer_pico_tiempo"),
+        Primer_pico_presion: val("Primer_pico_presion"),
+        Segundo_pico_tiempo: val("Segundo_pico_tiempo"),
+        Segundo_pico_presion: val("Segundo_pico_presion"),
+        Sostenimiento_tiempo: val("Sostenimiento_tiempo"),
+        Sostenimiento_presion: val("Sostenimiento_presion"),
+        Final_ciclo_esterilizacion: val("Final_ciclo_esterilizacion"),
+        Tiempo_ciclo_esterilizacion: val("Tiempo_ciclo_esterilizacion"),
+        Tiempo_descarga_inicio: val("Tiempo_descarga_inicio"),
+        Tiempo_descarga_final: val("Tiempo_descarga_final"),
+        Tiempo_descarga_tiempo: val("Tiempo_descarga_tiempo"),
+        Observaciones: val("Observaciones")
+      };
+
+      showSyncModal(
+        `Guardando Esterilizador Nº ${estNum}...`,
+        "Enviando fila a la tabla Esterilizacion en Excel (SharePoint)..."
+      );
+
+      let syncStatusMsg = "";
+      let isWarn = false;
+      let isSynced = false;
+
+      try {
+        const res = await sendCycleToSharePoint(excelRecord);
+        if (res.synced) {
+          isSynced = true;
+          syncStatusMsg = `¡GUARDADO EN EXCEL! Registro #${nextId} (Esterilizador Nº ${estNum}) cargado en SharePoint.`;
+        } else {
+          isWarn = true;
+          syncStatusMsg = `Guardado localmente (Registro #${nextId}). Pendiente de envío: ${res.reason}`;
+        }
+      } catch (err) {
+        isWarn = true;
+        syncStatusMsg = `Guardado localmente (Registro #${nextId}), pero falló el envío (${err.message}).`;
+      }
+
+      const localEntry = { ...excelRecord, _synced: isSynced };
+      history.unshift(localEntry);
+      localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
+
+      card.querySelectorAll("[data-field]").forEach(el => el.value = "");
+      syncDrafts();
+      renderTable();
+      hideSyncModal();
+      showFeedback(syncStatusMsg, isWarn);
+    }
+
+    function renderTable() {
+      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+      const q = document.getElementById("searchInput").value.toLowerCase();
+      const tbody = document.getElementById("tableBody");
+      tbody.innerHTML = "";
+
+      const filtered = history.filter(r =>
+        (r.Fecha || "").toLowerCase().includes(q) ||
+        (r.Turno || "").toLowerCase().includes(q) ||
+        (r.Operador || "").toLowerCase().includes(q) ||
+        (`est ${r.Esterilizador}`).includes(q) ||
+        (r.Observaciones || "").toLowerCase().includes(q)
+      );
+
+      if (!filtered.length) {
+        tbody.innerHTML = `<tr><td colspan="14" style="text-align:center; padding:1.75rem;">No hay ciclos registrados todavía.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach(r => {
+        const realIdx = history.indexOf(r);
+        const spBadge = r._synced
+          ? `<span class="badge-sync-ok">En Excel SP</span>`
+          : `<span class="badge-sync-pend">Pendiente</span>`;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${r.Fecha}</strong></td>
+          <td>${r.Turno || "-"}</td>
+          <td>${r.Operador || "-"}</td>
+          <td><span class="badge-est">Est. Nº ${r.Esterilizador}</span></td>
+          <td>${r.Tiempo_llenado_inicio || "-"} - ${r.Tiempo_llenado_final || "-"} (${r.Tiempo_llenado_tiempo || "-"} Min)</td>
+          <td>${r.Inicio_ciclo_esterilizacion || "-"} - ${r.Final_ciclo_esterilizacion || "-"}</td>
+          <td>${r.Desaireacion_tiempo || "-"} S / ${r.Desaireacion_presion || "-"} Bar</td>
+          <td>${r.Primer_pico_tiempo || "-"} S / ${r.Primer_pico_presion || "-"} Bar</td>
+          <td>${r.Segundo_pico_tiempo || "-"} S / ${r.Segundo_pico_presion || "-"} Bar</td>
+          <td><strong>${r.Sostenimiento_tiempo || "-"} S / ${r.Sostenimiento_presion || "-"} Bar</strong></td>
+          <td>${r.Tiempo_ciclo_esterilizacion || "-"} Min</td>
+          <td>${r.Tiempo_descarga_inicio || "-"} - ${r.Tiempo_descarga_final || "-"} (${r.Tiempo_descarga_tiempo || "-"} Min)</td>
+          <td>${spBadge}</td>
+          <td>
+            <div style="display:flex; gap:6px;">
+              <button class="btn btn-info" onclick="openCycleModal(${realIdx})">Ver</button>
+              <button class="btn btn-warning" onclick="editCycle(${realIdx})">Editar</button>
+              <button class="btn btn-danger" onclick="deleteCycle(${realIdx})">Eliminar</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openCycleModal(idx) {
+      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+      const r = history[idx];
+      if (!r) return;
+
+      document.getElementById("modalSubtitle").textContent =
+        `Registro #${r.Id} • Fecha: ${r.Fecha} • ${r.Turno || "-"} • Esterilizador Nº ${r.Esterilizador}`;
+
+      const items = [
+        ["Hora inicio / Hora final", `${r.Hora_inicio || "-"} / ${r.Hora_final || "-"}`],
+        ["Total de Esterilizadores", r.Total_esterilizadores || "-"],
+        ["Turno", r.Turno || "-"],
+        ["Operador", r.Operador || "-"],
+        ["Tiempo Llenado de RFF", `${r.Tiempo_llenado_inicio || "-"} - ${r.Tiempo_llenado_final || "-"} (${r.Tiempo_llenado_tiempo || "-"} Min)`],
+        ["Inicio / Final Ciclo Esterilización", `${r.Inicio_ciclo_esterilizacion || "-"} - ${r.Final_ciclo_esterilizacion || "-"}`],
+        ["Desaireación", `${r.Desaireacion_tiempo || "-"} S / ${r.Desaireacion_presion || "-"} Bar`],
+        ["Primer Pico", `${r.Primer_pico_tiempo || "-"} S / ${r.Primer_pico_presion || "-"} Bar`],
+        ["Segundo Pico", `${r.Segundo_pico_tiempo || "-"} S / ${r.Segundo_pico_presion || "-"} Bar`],
+        ["Sostenimiento", `${r.Sostenimiento_tiempo || "-"} S / ${r.Sostenimiento_presion || "-"} Bar`],
+        ["Tiempo Total de Esterilización", `${r.Tiempo_ciclo_esterilizacion || "-"} Min`],
+        ["Tiempo Descarga de RFF", `${r.Tiempo_descarga_inicio || "-"} - ${r.Tiempo_descarga_final || "-"} (${r.Tiempo_descarga_tiempo || "-"} Min)`],
+        ["Observaciones", r.Observaciones || "Sin observaciones"]
+      ];
+
+      document.getElementById("modalDetailGrid").innerHTML = items.map(([k, v]) => `
+        <div class="detail-item"><span>${k}</span>${v}</div>
+      `).join("");
+
+      document.getElementById("cycleModal").style.display = "flex";
+    }
+
+    function closeCycleModal() {
+      document.getElementById("cycleModal").style.display = "none";
+    }
+
+    function editCycle(idx) {
+      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+      const r = history[idx];
+      if (!r) return;
+
+      const card = document.querySelector(`.card[data-est="${r.Esterilizador}"]`);
+      const hasData = Array.from(card.querySelectorAll("[data-field]")).some(el => el.value.trim() !== "");
+      if (hasData && !confirm(`El Esterilizador Nº ${r.Esterilizador} tiene datos activos en pantalla. ¿Desea reemplazarlos con este registro?`)) {
+        return;
+      }
+
+      if (r.Turno) document.getElementById("turno").value = r.Turno;
+      if (r.Operador !== undefined) document.getElementById("operador").value = r.Operador;
+
+      EST_FIELDS.forEach(f => {
+        const el = card.querySelector(`[data-field="${f}"]`);
+        if (el) el.value = r[f] || "";
+      });
+      syncDrafts();
+      window.scrollTo({ top: 200, behavior: "smooth" });
+    }
+
+    function deleteCycle(idx) {
+      if (!confirm("¿Eliminar este ciclo del historial local?")) return;
+      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+      history.splice(idx, 1);
+      localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
+      renderTable();
+    }
+
+    loadDrafts();
+    renderTable();
+  </script>
+</body>
+</html>
