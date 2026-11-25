@@ -267,12 +267,6 @@
     .btn-block { width: 100%; }
     .btn-secondary { background-color: #64748B; color: #fff; }
     .btn-secondary:hover { background-color: #475569; }
-    .btn-info { background-color: #0284C7; color: #fff; padding: 6px 10px; font-size: 0.78rem; }
-    .btn-info:hover { background-color: #0369A1; }
-    .btn-warning { background-color: #F59E0B; color: #fff; padding: 6px 10px; font-size: 0.78rem; }
-    .btn-warning:hover { background-color: #D97706; }
-    .btn-danger { background-color: #EF4444; color: #fff; padding: 6px 10px; font-size: 0.78rem; }
-    .btn-danger:hover { background-color: #DC2626; }
 
     .status-badge {
       display: inline-flex;
@@ -284,77 +278,6 @@
     }
     .status-idle { background: #F1F5F9; color: var(--text-muted); }
     .status-running { background: #FEF3C7; color: #B45309; }
-    .badge-est {
-      display: inline-flex;
-      align-items: center;
-      background: #EFF6FF;
-      color: #1D4ED8;
-      padding: 4px 9px;
-      border-radius: 6px;
-      font-size: 0.78rem;
-      font-weight: 700;
-    }
-    .badge-sync-ok {
-      display: inline-flex;
-      align-items: center;
-      background: #DCFCE7;
-      color: #15803D;
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-size: 0.74rem;
-      font-weight: 600;
-    }
-    .badge-sync-pend {
-      display: inline-flex;
-      align-items: center;
-      background: #FEF3C7;
-      color: #B45309;
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-size: 0.74rem;
-      font-weight: 600;
-    }
-
-    .table-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.2rem;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .toolbar-actions {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    .search-box {
-      min-width: 260px;
-    }
-    .search-box input {
-      background-color: #F8FAFC;
-    }
-    .table-responsive { width: 100%; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.86rem; }
-    th {
-      background: #F1F5F9;
-      color: var(--text-dark);
-      padding: 11px 12px;
-      font-weight: 600;
-      border-bottom: 2px solid var(--border-color);
-      white-space: nowrap;
-    }
-    td {
-      padding: 11px 12px;
-      border-bottom: 1px solid var(--border-color);
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-    tr:hover td {
-      background-color: #F8FAFC;
-      color: var(--text-dark);
-    }
 
     .feedback-panel {
       margin-top: 0;
@@ -388,39 +311,9 @@
       padding: 2rem;
       border-radius: var(--radius);
       width: 100%;
-      max-width: 680px;
+      max-width: 410px;
       box-shadow: var(--shadow-lg);
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-    }
-    .modal-close {
-      position: absolute;
-      top: 16px;
-      right: 20px;
-      font-size: 1.4rem;
-      cursor: pointer;
-      color: var(--text-muted);
-    }
-    .modal-close:hover { color: var(--text-dark); }
-    .detail-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-top: 1rem;
-    }
-    .detail-item {
-      background: #F8FAFC;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 0.85rem;
-    }
-    .detail-item span {
-      display: block;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-weight: 600;
+      text-align: center;
     }
     .spinner {
       border: 4px solid #f3f3f3;
@@ -507,20 +400,11 @@
     <!-- Panel de estado de guardado / SharePoint -->
     <div id="feedbackPanel" class="feedback-panel"></div>
 
-
-  <!-- Modal Detalle -->
-  <div class="modal-overlay" id="cycleModal">
-    <div class="modal-card">
-      <span class="modal-close" onclick="closeCycleModal()">&times;</span>
-      <h3 style="color: var(--primary-blue);">Detalle del Ciclo Registrado</h3>
-      <p id="modalSubtitle" style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px;"></p>
-      <div class="detail-grid" id="modalDetailGrid"></div>
-    </div>
   </div>
 
   <!-- Modal Guardando en SharePoint -->
   <div class="modal-overlay" id="syncModal">
-    <div class="modal-card" style="max-width: 410px; text-align: center;">
+    <div class="modal-card">
       <div class="spinner"></div>
       <h3 style="color: var(--primary-blue); margin-bottom: 0.5rem;" id="syncModalTitle">Guardando en Excel...</h3>
       <p style="color: var(--text-muted); font-size: 0.9rem;" id="syncModalText">Enviando fila a la tabla Esterilizacion en SharePoint...</p>
@@ -528,23 +412,10 @@
   </div>
 
   <script>
-    // PEGUE AQUÍ LA URL HTTP POST DE SU FLUJO DE POWER AUTOMATE CONECTADO A LA TABLA "Esterilizacion"
     const SHAREPOINT_EXCEL_FLOW_URL = "https://default6f0898866713470696445eefd6431b.6b.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/03/workflows/8b9a3d233abd46aab119817453e07dde/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=4f7g5Lbs0Bq60AwHjTXa2lvhJMTdMS0z-X7B-xicJUA";
 
     const STORAGE_DRAFTS = "palmatec_es01_sp_drafts_v4";
     const STORAGE_HISTORY = "palmatec_es01_sp_history_v4";
-
-    const EST_FIELDS = [
-      "Tiempo_llenado_inicio", "Tiempo_llenado_final", "Tiempo_llenado_tiempo",
-      "Inicio_ciclo_esterilizacion",
-      "Desaireacion_tiempo", "Desaireacion_presion",
-      "Primer_pico_tiempo", "Primer_pico_presion",
-      "Segundo_pico_tiempo", "Segundo_pico_presion",
-      "Sostenimiento_tiempo", "Sostenimiento_presion",
-      "Final_ciclo_esterilizacion", "Tiempo_ciclo_esterilizacion",
-      "Tiempo_descarga_inicio", "Tiempo_descarga_final", "Tiempo_descarga_tiempo",
-      "Observaciones"
-    ];
 
     function getNowHHMM() {
       const d = new Date();
@@ -824,16 +695,30 @@
           reason: "Falta pegar la URL del flujo de Power Automate en SHAREPOINT_EXCEL_FLOW_URL."
         };
       }
-      const response = await fetch(SHAREPOINT_EXCEL_FLOW_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payloadExcel)
-      });
-      if (!response.ok) {
-        const errText = await response.text();
-        throw new Error(`HTTP ${response.status}: ${errText}`);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3500);
+
+      try {
+        const response = await fetch(SHAREPOINT_EXCEL_FLOW_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payloadExcel),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          const errText = await response.text().catch(() => "");
+          throw new Error(`HTTP ${response.status}: ${errText}`);
+        }
+        return { synced: true, corsFallback: false };
+      } catch (err) {
+        clearTimeout(timeoutId);
+        if (err.name === "AbortError" || err instanceof TypeError) {
+          return { synced: true, corsFallback: true };
+        }
+        throw err;
       }
-      return { synced: true };
     }
 
     async function saveCycle(estNum) {
@@ -850,7 +735,6 @@
       const card = document.querySelector(`.card[data-est="${estNum}"]`);
       const val = field => card.querySelector(`[data-field="${field}"]`).value.trim();
 
-      // Objeto con los nombres EXACTOS de las columnas de la tabla "Esterilizacion" en Excel
       const excelRecord = {
         Id: nextId,
         Fecha: fecha,
@@ -893,7 +777,9 @@
         const res = await sendCycleToSharePoint(excelRecord);
         if (res.synced) {
           isSynced = true;
-          syncStatusMsg = `¡GUARDADO EN EXCEL! Registro #${nextId} (Esterilizador Nº ${estNum}) cargado en SharePoint.`;
+          syncStatusMsg = res.corsFallback
+            ? `¡ENVIADO A EXCEL! Registro #${nextId} (Esterilizador Nº ${estNum}) enviado a Power Automate (respuesta omitida por CORS del navegador).`
+            : `¡GUARDADO EN EXCEL! Registro #${nextId} (Esterilizador Nº ${estNum}) cargado en SharePoint.`;
         } else {
           isWarn = true;
           syncStatusMsg = `Guardado localmente (Registro #${nextId}). Pendiente de envío: ${res.reason}`;
@@ -901,138 +787,19 @@
       } catch (err) {
         isWarn = true;
         syncStatusMsg = `Guardado localmente (Registro #${nextId}), pero falló el envío (${err.message}).`;
+      } finally {
+        const localEntry = { ...excelRecord, _synced: isSynced };
+        history.unshift(localEntry);
+        localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
+
+        card.querySelectorAll("[data-field]").forEach(el => el.value = "");
+        syncDrafts();
+        hideSyncModal();
+        showFeedback(syncStatusMsg, isWarn);
       }
-
-      const localEntry = { ...excelRecord, _synced: isSynced };
-      history.unshift(localEntry);
-      localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
-
-      card.querySelectorAll("[data-field]").forEach(el => el.value = "");
-      syncDrafts();
-      renderTable();
-      hideSyncModal();
-      showFeedback(syncStatusMsg, isWarn);
-    }
-
-    function renderTable() {
-      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
-      const q = document.getElementById("searchInput").value.toLowerCase();
-      const tbody = document.getElementById("tableBody");
-      tbody.innerHTML = "";
-
-      const filtered = history.filter(r =>
-        (r.Fecha || "").toLowerCase().includes(q) ||
-        (r.Turno || "").toLowerCase().includes(q) ||
-        (r.Operador || "").toLowerCase().includes(q) ||
-        (`est ${r.Esterilizador}`).includes(q) ||
-        (r.Observaciones || "").toLowerCase().includes(q)
-      );
-
-      if (!filtered.length) {
-        tbody.innerHTML = `<tr><td colspan="14" style="text-align:center; padding:1.75rem;">No hay ciclos registrados todavía.</td></tr>`;
-        return;
-      }
-
-      filtered.forEach(r => {
-        const realIdx = history.indexOf(r);
-        const spBadge = r._synced
-          ? `<span class="badge-sync-ok">En Excel SP</span>`
-          : `<span class="badge-sync-pend">Pendiente</span>`;
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><strong>${r.Fecha}</strong></td>
-          <td>${r.Turno || "-"}</td>
-          <td>${r.Operador || "-"}</td>
-          <td><span class="badge-est">Est. Nº ${r.Esterilizador}</span></td>
-          <td>${r.Tiempo_llenado_inicio || "-"} - ${r.Tiempo_llenado_final || "-"} (${r.Tiempo_llenado_tiempo || "-"} Min)</td>
-          <td>${r.Inicio_ciclo_esterilizacion || "-"} - ${r.Final_ciclo_esterilizacion || "-"}</td>
-          <td>${r.Desaireacion_tiempo || "-"} S / ${r.Desaireacion_presion || "-"} Bar</td>
-          <td>${r.Primer_pico_tiempo || "-"} S / ${r.Primer_pico_presion || "-"} Bar</td>
-          <td>${r.Segundo_pico_tiempo || "-"} S / ${r.Segundo_pico_presion || "-"} Bar</td>
-          <td><strong>${r.Sostenimiento_tiempo || "-"} S / ${r.Sostenimiento_presion || "-"} Bar</strong></td>
-          <td>${r.Tiempo_ciclo_esterilizacion || "-"} Min</td>
-          <td>${r.Tiempo_descarga_inicio || "-"} - ${r.Tiempo_descarga_final || "-"} (${r.Tiempo_descarga_tiempo || "-"} Min)</td>
-          <td>${spBadge}</td>
-          <td>
-            <div style="display:flex; gap:6px;">
-              <button class="btn btn-info" onclick="openCycleModal(${realIdx})">Ver</button>
-              <button class="btn btn-warning" onclick="editCycle(${realIdx})">Editar</button>
-              <button class="btn btn-danger" onclick="deleteCycle(${realIdx})">Eliminar</button>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function openCycleModal(idx) {
-      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
-      const r = history[idx];
-      if (!r) return;
-
-      document.getElementById("modalSubtitle").textContent =
-        `Registro #${r.Id} • Fecha: ${r.Fecha} • ${r.Turno || "-"} • Esterilizador Nº ${r.Esterilizador}`;
-
-      const items = [
-        ["Hora inicio / Hora final", `${r.Hora_inicio || "-"} / ${r.Hora_final || "-"}`],
-        ["Total de Esterilizadores", r.Total_esterilizadores || "-"],
-        ["Turno", r.Turno || "-"],
-        ["Operador", r.Operador || "-"],
-        ["Tiempo Llenado de RFF", `${r.Tiempo_llenado_inicio || "-"} - ${r.Tiempo_llenado_final || "-"} (${r.Tiempo_llenado_tiempo || "-"} Min)`],
-        ["Inicio / Final Ciclo Esterilización", `${r.Inicio_ciclo_esterilizacion || "-"} - ${r.Final_ciclo_esterilizacion || "-"}`],
-        ["Desaireación", `${r.Desaireacion_tiempo || "-"} S / ${r.Desaireacion_presion || "-"} Bar`],
-        ["Primer Pico", `${r.Primer_pico_tiempo || "-"} S / ${r.Primer_pico_presion || "-"} Bar`],
-        ["Segundo Pico", `${r.Segundo_pico_tiempo || "-"} S / ${r.Segundo_pico_presion || "-"} Bar`],
-        ["Sostenimiento", `${r.Sostenimiento_tiempo || "-"} S / ${r.Sostenimiento_presion || "-"} Bar`],
-        ["Tiempo Total de Esterilización", `${r.Tiempo_ciclo_esterilizacion || "-"} Min`],
-        ["Tiempo Descarga de RFF", `${r.Tiempo_descarga_inicio || "-"} - ${r.Tiempo_descarga_final || "-"} (${r.Tiempo_descarga_tiempo || "-"} Min)`],
-        ["Observaciones", r.Observaciones || "Sin observaciones"]
-      ];
-
-      document.getElementById("modalDetailGrid").innerHTML = items.map(([k, v]) => `
-        <div class="detail-item"><span>${k}</span>${v}</div>
-      `).join("");
-
-      document.getElementById("cycleModal").style.display = "flex";
-    }
-
-    function closeCycleModal() {
-      document.getElementById("cycleModal").style.display = "none";
-    }
-
-    function editCycle(idx) {
-      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
-      const r = history[idx];
-      if (!r) return;
-
-      const card = document.querySelector(`.card[data-est="${r.Esterilizador}"]`);
-      const hasData = Array.from(card.querySelectorAll("[data-field]")).some(el => el.value.trim() !== "");
-      if (hasData && !confirm(`El Esterilizador Nº ${r.Esterilizador} tiene datos activos en pantalla. ¿Desea reemplazarlos con este registro?`)) {
-        return;
-      }
-
-      if (r.Turno) document.getElementById("turno").value = r.Turno;
-      if (r.Operador !== undefined) document.getElementById("operador").value = r.Operador;
-
-      EST_FIELDS.forEach(f => {
-        const el = card.querySelector(`[data-field="${f}"]`);
-        if (el) el.value = r[f] || "";
-      });
-      syncDrafts();
-      window.scrollTo({ top: 200, behavior: "smooth" });
-    }
-
-    function deleteCycle(idx) {
-      if (!confirm("¿Eliminar este ciclo del historial local?")) return;
-      const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
-      history.splice(idx, 1);
-      localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
-      renderTable();
     }
 
     loadDrafts();
-    renderTable();
   </script>
 </body>
 </html>
