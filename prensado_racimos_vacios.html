@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control del Prensado de Racimos Vacíos (FR-IN-PA-PR-01) - Palmatec</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-blue: #004085;
+      --primary-dark: #002752;
+      --accent-green: #76BC21;
+      --accent-green-hover: #619c1b;
+      --bg-light: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-dark: #1E293B;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+      --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.08);
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    header {
+      background: #fff;
+      padding: 1.1rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header img {
+      height: 48px;
+      object-fit: contain;
+    }
+    .logo-fallback {
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--primary-blue);
+      letter-spacing: 0.5px;
+      display: none;
+      align-items: center;
+    }
+    .header-title {
+      font-size: 1.1rem;
+      color: var(--primary-blue);
+      font-weight: 600;
+    }
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .doc-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      background: #F1F5F9;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+    .autosave-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.8rem;
+      color: #15803D;
+      background: #DCFCE7;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .hero-banner-container {
+      width: 100%;
+      height: 220px;
+      position: relative;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-pattern {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.6;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: #fff;
+      padding: 0 1.5rem;
+    }
+    .hero-content h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .main-container {
+      max-width: 1380px;
+      margin: -2.2rem auto 4rem;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 1.75rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+    }
+    .card-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .card h3 {
+      color: var(--primary-blue);
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    .grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 1024px) {
+      .grid-5, .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .grid-5, .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .form-group { margin-bottom: 0; }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.8rem;
+      margin-bottom: 0.35rem;
+      color: var(--text-dark);
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      background-color: #FFFFFF;
+      color: var(--text-dark);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input[readonly] {
+      background-color: #F1F5F9;
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(0, 64, 133, 0.15);
+    }
+
+    .time-input-wrap {
+      display: flex;
+      gap: 4px;
+    }
+    .btn-now {
+      background: #EFF6FF;
+      color: var(--primary-blue);
+      border: 1px solid #BFDBFE;
+      border-radius: 6px;
+      padding: 0 9px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .btn-now:hover { background: #DBEAFE; }
+
+    .btn {
+      background-color: var(--accent-green);
+      color: #FFFFFF;
+      font-weight: 600;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn:hover { background-color: var(--accent-green-hover); }
+    .btn-secondary { background-color: #64748B; color: #fff; }
+    .btn-secondary:hover { background-color: #475569; }
+    .btn-outline {
+      background-color: #EFF6FF;
+      color: var(--primary-blue);
+      border: 1px solid #BFDBFE;
+      padding: 7px 12px;
+      font-size: 0.82rem;
+    }
+    .btn-outline:hover { background-color: #DBEAFE; }
+    .btn-danger-sm {
+      background-color: #FEE2E2;
+      color: #B91C1C;
+      border: 1px solid #FECACA;
+      padding: 5px 9px;
+      font-size: 0.78rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-danger-sm:hover { background-color: #FECACA; }
+
+    /* Detalles de tiempo muerto */
+    .downtime-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      gap: 0.85rem;
+    }
+    .downtime-item {
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .downtime-item.active {
+      border-color: var(--primary-blue);
+      background: #EFF6FF;
+    }
+    .downtime-check-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 0.84rem;
+      color: var(--text-dark);
+      cursor: pointer;
+    }
+    .downtime-check-row input[type="checkbox"] {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--primary-blue);
+      cursor: pointer;
+    }
+
+    /* Tabla de Cuantificación de Raquis */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+    table.raquis-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      min-width: 960px;
+    }
+    table.raquis-table th {
+      background: #F1F5F9;
+      color: var(--text-dark);
+      padding: 9px 10px;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      font-size: 0.78rem;
+    }
+    table.raquis-table th.group-prensado {
+      background: #EFF6FF;
+      color: var(--primary-dark);
+    }
+    table.raquis-table th.group-sin {
+      background: #F0FDF4;
+      color: #14532D;
+    }
+    table.raquis-table td {
+      padding: 6px 8px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      vertical-align: middle;
+    }
+    table.raquis-table td input {
+      padding: 6px 8px;
+      font-size: 0.83rem;
+    }
+    table.raquis-table tr.totales-row td {
+      background: #F8FAFC;
+      font-weight: 700;
+      color: var(--primary-dark);
+      padding: 9px 10px;
+    }
+    .row-num {
+      font-weight: 700;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      width: 42px;
+    }
+
+    /* Racimos mal desfrutados - 6 casillas + Total */
+    .rmd-row-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr) 1.25fr;
+      gap: 0.75rem;
+      align-items: end;
+    }
+    @media (max-width: 900px) {
+      .rmd-row-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 500px) {
+      .rmd-row-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .actions-bar {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .feedback-panel {
+      background: #0F172A;
+      color: #4ADE80;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.82rem;
+      display: none;
+      border: 1px solid #22C55E;
+      white-space: pre-wrap;
+    }
+    .feedback-panel.warn {
+      color: #FBBF24;
+      border-color: #F59E0B;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .modal-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 410px;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-blue);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <img src="https://wppalmatec.azurewebsites.net/wp-content/uploads/2022/07/1-palmateclogo.png" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+      <div id="logoFallback" class="logo-fallback">PALMATEC</div>
+      <div class="header-title">Control del Prensado de Racimos Vacíos</div>
+    </div>
+
+    <div class="header-badges">
+      <div class="autosave-badge" id="autosaveStatus">Borrador sincronizado</div>
+      <div class="doc-badge">
+        <span><strong>Código:</strong> FR-IN-PA-PR-01 | <strong>Versión:</strong> 4 | <strong>Aprobado:</strong> J.Gamboa</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero-banner-container">
+    <div class="hero-pattern"></div>
+    <div class="hero-content">
+      <h1>Control del Prensado de Racimos Vacíos</h1>
+    </div>
+  </section>
+
+  <div class="main-container">
+
+    <!-- 1. Datos de Jornada y Operadores -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Datos de Jornada y Operador</h3>
+        <button type="button" class="btn btn-secondary" style="padding: 7px 14px; font-size: 0.82rem;" onclick="clearJornada()">
+          Limpiar jornada
+        </button>
+      </div>
+
+      <div class="grid-3">
+        <div class="form-group">
+          <label for="fecha">Fecha *</label>
+          <input type="date" id="fecha" class="persist-field" required>
+        </div>
+        <div class="form-group">
+          <label for="turno">Turno</label>
+          <select id="turno" class="persist-field">
+            <option value="Turno 1">Turno 1</option>
+            <option value="Turno 2">Turno 2</option>
+            <option value="Turno 3">Turno 3</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="operador">Operador</label>
+          <input type="text" id="operador" class="persist-field" placeholder="Nombre del operador">
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Control de Proceso Raquis -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Control de Proceso Raquis</h3>
+      </div>
+
+      <div class="grid-5" style="margin-bottom: 1rem;">
+        <div class="form-group">
+          <label for="horimetroInicial">Horímetro inicial</label>
+          <input type="number" step="0.01" id="horimetroInicial" class="persist-field calc-proc" placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label for="horimetroFinal">Horímetro final</label>
+          <input type="number" step="0.01" id="horimetroFinal" class="persist-field calc-proc" placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label for="tiempoEfectivo">Tiempo efectivo (h)</label>
+          <input type="number" step="0.01" id="tiempoEfectivo" class="persist-field calc-proc" placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label for="tiempoMuerto">Tiempo muerto (h)</label>
+          <input type="number" step="0.01" id="tiempoMuerto" class="persist-field calc-proc" placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label for="horasTrabajo">Horas de trabajo (Efectivo - Muerto)</label>
+          <input type="number" step="0.01" id="horasTrabajo" class="persist-field" placeholder="Automático" readonly>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="hInicioDesfrutadora">H. inicio desfrutadora</label>
+          <div class="time-input-wrap">
+            <input type="time" id="hInicioDesfrutadora" class="persist-field">
+            <button type="button" class="btn-now" onclick="setInputNow('hInicioDesfrutadora')">Ahora</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="hParoDesfrutadora">H. paro desfrutadora</label>
+          <div class="time-input-wrap">
+            <input type="time" id="hParoDesfrutadora" class="persist-field">
+            <button type="button" class="btn-now" onclick="setInputNow('hParoDesfrutadora')">Ahora</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Detalles de tiempo muerto -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Detalles de tiempo muerto (Marque X y detalle cuánto tiempo)</h3>
+        <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;" id="totalDowntimeDetail">
+          Total detallado: 0 min
+        </span>
+      </div>
+
+      <div class="downtime-grid" id="downtimeContainer"></div>
+    </div>
+
+    <!-- 4. Cuantificación de raquis (prensado y sin prensar) -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Cuantificación de raquis (prensado y sin prensar)</h3>
+        <button type="button" class="btn btn-outline" onclick="addRaquisRow()">+ Agregar fila</button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="raquis-table" id="raquisTable">
+          <thead>
+            <tr>
+              <th rowspan="2" style="width: 42px;">#</th>
+              <th colspan="3" class="group-prensado">Raquis prensado</th>
+              <th colspan="3" class="group-sin">Raquis sin prensar</th>
+              <th rowspan="2" style="width: 58px;">Acción</th>
+            </tr>
+            <tr>
+              <th class="group-prensado">Hora Inicio</th>
+              <th class="group-prensado">Hora Final</th>
+              <th class="group-prensado">Viaje de raquis prensado</th>
+              <th class="group-sin">Hora Inicio</th>
+              <th class="group-sin">Hora Final</th>
+              <th class="group-sin">Viaje de raquis sin prensar</th>
+            </tr>
+          </thead>
+          <tbody id="raquisTableBody"></tbody>
+          <tfoot>
+            <tr class="totales-row">
+              <td>Total</td>
+              <td colspan="2" style="text-align: right; color: var(--text-muted);">Total viajes prensado:</td>
+              <td id="totalViajesPrensado">0</td>
+              <td colspan="2" style="text-align: right; color: var(--text-muted);">Total viajes sin prensar:</td>
+              <td id="totalViajesSinPrensar">0</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5. Racimos mal desfrutados -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Racimos mal desfrutados</h3>
+      </div>
+
+      <div class="rmd-row-grid">
+        <div class="form-group">
+          <label for="rmd1">Muestra 1</label>
+          <input type="number" step="1" min="0" id="rmd1" class="persist-field calc-rmd" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label for="rmd2">Muestra 2</label>
+          <input type="number" step="1" min="0" id="rmd2" class="persist-field calc-rmd" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label for="rmd3">Muestra 3</label>
+          <input type="number" step="1" min="0" id="rmd3" class="persist-field calc-rmd" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label for="rmd4">Muestra 4</label>
+          <input type="number" step="1" min="0" id="rmd4" class="persist-field calc-rmd" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label for="rmd5">Muestra 5</label>
+          <input type="number" step="1" min="0" id="rmd5" class="persist-field calc-rmd" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label for="rmd6">Muestra 6</label>
+          <input type="number" step="1" min="0" id="rmd6" class="persist-field calc-rmd" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label for="rmdTotal">Total</label>
+          <input type="number" step="1" id="rmdTotal" class="persist-field" placeholder="0" readonly>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acciones principales -->
+    <div class="actions-bar">
+      <button type="button" class="btn" onclick="savePrensado()">Guardar registro</button>
+    </div>
+
+    <!-- Panel de estado -->
+    <div id="feedbackPanel" class="feedback-panel"></div>
+
+  </div>
+
+  <!-- Modal Guardando -->
+  <div class="modal-overlay" id="syncModal">
+    <div class="modal-card">
+      <div class="spinner"></div>
+      <h3 style="color: var(--primary-blue); margin-bottom: 0.5rem;" id="syncModalTitle">Guardando registro...</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;" id="syncModalText">Enviando filas a la tabla Prensado_racimos en SharePoint...</p>
+    </div>
+  </div>
+
+  <script>
+    // Pegue aquí la URL HTTP POST de su flujo de Power Automate para la tabla Prensado_racimos:
+    const SHAREPOINT_PRENSADO_FLOW_URL = "https://default6f0898866713470696445eefd6431b.6b.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/16/workflows/cb770af4b6e1465681a7a73e31358d66/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=1EM6EcdLU2jNoqA0gJQ29uSqayn10vtCxv7eJwuValU";
+
+    const STORAGE_KEY_PR01 = "palmatec_pr01_draft_v3";
+    const STORAGE_HIST_PR01 = "palmatec_pr01_history_v3";
+
+    const DOWNTIME_CATEGORIES = [
+      { key: "mecanico", field: "Mecanico", label: "Mecánico" },
+      { key: "falta_fruta", field: "Falta_fruta", label: "Falta de fruta" },
+      { key: "mantenimiento", field: "Mantenimiento", label: "Mantenimiento" },
+      { key: "falla_electrica", field: "Falla_electrica", label: "Falla eléctrica" },
+      { key: "baja_presion", field: "Baja_presion", label: "Baja presión" },
+      { key: "transporte", field: "Transporte", label: "Transporte" },
+      { key: "almacenar_fibra", field: "Almacenar_fibra", label: "Almacenar fibra" }
+    ];
+
+    const INITIAL_RAQUIS_ROWS = 3;
+
+    function getTodayISO() {
+      const d = new Date();
+      return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    }
+
+    function getNowHHMM() {
+      const d = new Date();
+      return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+    }
+
+    function setInputNow(inputId) {
+      const el = document.getElementById(inputId);
+      if (!el) return;
+      el.value = getNowHHMM();
+      syncDraft();
+    }
+
+    function renderDowntimeCards() {
+      const container = document.getElementById("downtimeContainer");
+      container.innerHTML = DOWNTIME_CATEGORIES.map(cat => `
+        <div class="downtime-item" id="dt-box-${cat.key}">
+          <label class="downtime-check-row">
+            <input type="checkbox" id="dt-chk-${cat.key}" onchange="onDowntimeChange('${cat.key}')">
+            <span>${cat.label}</span>
+          </label>
+          <div class="form-group">
+            <label for="dt-min-${cat.key}" style="font-size: 0.74rem; color: var(--text-muted);">Tiempo / Detalle</label>
+            <input type="number" step="0.1" min="0" id="dt-min-${cat.key}" placeholder="0.0" oninput="onDowntimeChange('${cat.key}')">
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function onDowntimeChange(key) {
+      const chk = document.getElementById(`dt-chk-${key}`);
+      const minInput = document.getElementById(`dt-min-${key}`);
+      const box = document.getElementById(`dt-box-${key}`);
+
+      const minVal = parseFloat(minInput.value);
+      if (!chk.checked && !isNaN(minVal) && minVal > 0) {
+        chk.checked = true;
+      }
+      box.classList.toggle("active", chk.checked);
+
+      let totalMin = 0;
+      let markedCount = 0;
+      DOWNTIME_CATEGORIES.forEach(cat => {
+        const c = document.getElementById(`dt-chk-${cat.key}`).checked;
+        const v = parseFloat(document.getElementById(`dt-min-${cat.key}`).value) || 0;
+        if (c) markedCount++;
+        totalMin += v;
+      });
+
+      document.getElementById("totalDowntimeDetail").textContent =
+        `Marcados: ${markedCount} • Total detallado: ${totalMin.toFixed(1)} min`;
+
+      syncDraft();
+    }
+
+    function createRaquisRowElement(index, data = {}) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="row-num">${index}</td>
+        <td><input type="time" data-col="prensado_inicio" value="${data.prensado_inicio || ""}"></td>
+        <td><input type="time" data-col="prensado_final" value="${data.prensado_final || ""}"></td>
+        <td><input type="number" step="1" min="0" data-col="viaje_prensado" class="calc-viaje-p" value="${data.viaje_prensado || ""}" placeholder="0"></td>
+        <td><input type="time" data-col="sin_prensar_inicio" value="${data.sin_prensar_inicio || ""}"></td>
+        <td><input type="time" data-col="sin_prensar_final" value="${data.sin_prensar_final || ""}"></td>
+        <td><input type="number" step="1" min="0" data-col="viaje_sin_prensar" class="calc-viaje-s" value="${data.viaje_sin_prensar || ""}" placeholder="0"></td>
+        <td><button type="button" class="btn-danger-sm" onclick="removeRaquisRow(this)" title="Eliminar fila">✕</button></td>
+      `;
+      tr.querySelectorAll("input").forEach(inp => {
+        inp.addEventListener("input", () => {
+          recalcRaquisTotals();
+          syncDraft();
+        });
+      });
+      return tr;
+    }
+
+    function renumberRaquisRows() {
+      const rows = document.querySelectorAll("#raquisTableBody tr");
+      rows.forEach((tr, idx) => {
+        tr.querySelector(".row-num").textContent = idx + 1;
+      });
+    }
+
+    function addRaquisRow(data = {}) {
+      const tbody = document.getElementById("raquisTableBody");
+      const nextIndex = tbody.querySelectorAll("tr").length + 1;
+      tbody.appendChild(createRaquisRowElement(nextIndex, data));
+      recalcRaquisTotals();
+      syncDraft();
+    }
+
+    function removeRaquisRow(btn) {
+      const tbody = document.getElementById("raquisTableBody");
+      if (tbody.querySelectorAll("tr").length <= 1) {
+        alert("Debe quedar al menos una fila en la tabla.");
+        return;
+      }
+      btn.closest("tr").remove();
+      renumberRaquisRows();
+      recalcRaquisTotals();
+      syncDraft();
+    }
+
+    function recalcRaquisTotals() {
+      let sumP = 0;
+      let sumS = 0;
+      document.querySelectorAll(".calc-viaje-p").forEach(el => {
+        sumP += parseFloat(el.value) || 0;
+      });
+      document.querySelectorAll(".calc-viaje-s").forEach(el => {
+        sumS += parseFloat(el.value) || 0;
+      });
+      document.getElementById("totalViajesPrensado").textContent = sumP;
+      document.getElementById("totalViajesSinPrensar").textContent = sumS;
+    }
+
+    function recalcProcesoAndRmd(changedId = "") {
+      const hIni = parseFloat(document.getElementById("horimetroInicial").value);
+      const hFin = parseFloat(document.getElementById("horimetroFinal").value);
+      const tEfInput = document.getElementById("tiempoEfectivo");
+      const tMuerto = parseFloat(document.getElementById("tiempoMuerto").value) || 0;
+
+      if ((changedId === "horimetroInicial" || changedId === "horimetroFinal") && !isNaN(hIni) && !isNaN(hFin) && hFin >= hIni) {
+        tEfInput.value = +(hFin - hIni).toFixed(2);
+      }
+
+      const tEfRaw = tEfInput.value.trim();
+      if (tEfRaw !== "" && !isNaN(parseFloat(tEfRaw))) {
+        const horasTrab = +(parseFloat(tEfRaw) - tMuerto).toFixed(2);
+        document.getElementById("horasTrabajo").value = horasTrab;
+      } else {
+        document.getElementById("horasTrabajo").value = "";
+      }
+
+      let totalRmd = 0;
+      for (let i = 1; i <= 6; i++) {
+        totalRmd += parseFloat(document.getElementById(`rmd${i}`).value) || 0;
+      }
+      document.getElementById("rmdTotal").value = totalRmd;
+    }
+
+    // Construye las filas mapeadas exactamente a las 25 columnas de Prensado_racimos.xlsx
+    function buildExcelRows(startId) {
+      const fecha = document.getElementById("fecha").value;
+      const turno = document.getElementById("turno").value;
+      const operador = document.getElementById("operador").value.trim();
+
+      const hIni = document.getElementById("horimetroInicial").value;
+      const hFin = document.getElementById("horimetroFinal").value;
+      const tEf = document.getElementById("tiempoEfectivo").value;
+      const tMuerto = document.getElementById("tiempoMuerto").value;
+      const hTrab = document.getElementById("horasTrabajo").value;
+      const hIniDesf = document.getElementById("hInicioDesfrutadora").value;
+      const hParoDesf = document.getElementById("hParoDesfrutadora").value;
+
+      const dtVal = key => {
+        const chk = document.getElementById(`dt-chk-${key}`).checked;
+        const val = document.getElementById(`dt-min-${key}`).value.trim();
+        if (val !== "") return val;
+        return chk ? "X" : "";
+      };
+
+      const rmdTotal = document.getElementById("rmdTotal").value;
+
+      const activeRows = [];
+      document.querySelectorAll("#raquisTableBody tr").forEach(tr => {
+        const getVal = col => tr.querySelector(`[data-col="${col}"]`).value.trim();
+        const rowObj = {
+          prensado_inicio: getVal("prensado_inicio"),
+          prensado_final: getVal("prensado_final"),
+          viaje_prensado: getVal("viaje_prensado"),
+          sin_prensar_inicio: getVal("sin_prensar_inicio"),
+          sin_prensar_final: getVal("sin_prensar_final"),
+          viaje_sin_prensar: getVal("viaje_sin_prensar")
+        };
+        const hasAny = Object.values(rowObj).some(v => v !== "");
+        if (hasAny) activeRows.push(rowObj);
+      });
+
+      const rowsToEmit = activeRows.length > 0 ? activeRows : [{
+        prensado_inicio: "",
+        prensado_final: "",
+        viaje_prensado: "",
+        sin_prensar_inicio: "",
+        sin_prensar_final: "",
+        viaje_sin_prensar: ""
+      }];
+
+      return rowsToEmit.map((r, idx) => ({
+        Id: startId + idx,
+        Fecha: fecha,
+        Turno: turno,
+        Operador: operador,
+        Horimetro_inicial: hIni,
+        Horimetro_final: hFin,
+        Tiempo_efectivo: tEf,
+        Tiempo_muerto: tMuerto,
+        Horas_trabajo: hTrab,
+        "H.inicio_desfrutadora": hIniDesf,
+        "H.paro_desfrutado": hParoDesf,
+        Mecanico: dtVal("mecanico"),
+        Falta_fruta: dtVal("falta_fruta"),
+        Mantenimiento: dtVal("mantenimiento"),
+        Falla_electrica: dtVal("falla_electrica"),
+        Baja_presion: dtVal("baja_presion"),
+        Transporte: dtVal("transporte"),
+        Almacenar_fibra: dtVal("almacenar_fibra"),
+        Prensado_hora_inicio: r.prensado_inicio,
+        Prensado_hora_final: r.prensado_final,
+        Prensado_viaje_raquis: r.viaje_prensado,
+        Sin_prensado_hora_inicio: r.sin_prensar_inicio,
+        Sin_prensado_hora_final: r.sin_prensar_final,
+        Sin_prensado_viaje_raquis: r.viaje_sin_prensar,
+        Racimos_mal_desfrutados: rmdTotal
+      }));
+    }
+
+    function collectDraftState() {
+      const downtime = {};
+      DOWNTIME_CATEGORIES.forEach(cat => {
+        downtime[cat.key] = {
+          marcado: document.getElementById(`dt-chk-${cat.key}`).checked,
+          minutos: document.getElementById(`dt-min-${cat.key}`).value.trim()
+        };
+      });
+
+      const raquisRows = [];
+      document.querySelectorAll("#raquisTableBody tr").forEach(tr => {
+        const getVal = col => tr.querySelector(`[data-col="${col}"]`).value.trim();
+        raquisRows.push({
+          prensado_inicio: getVal("prensado_inicio"),
+          prensado_final: getVal("prensado_final"),
+          viaje_prensado: getVal("viaje_prensado"),
+          sin_prensar_inicio: getVal("sin_prensar_inicio"),
+          sin_prensar_final: getVal("sin_prensar_final"),
+          viaje_sin_prensar: getVal("viaje_sin_prensar")
+        });
+      });
+
+      return {
+        fecha: document.getElementById("fecha").value,
+        turno: document.getElementById("turno").value,
+        operador: document.getElementById("operador").value.trim(),
+        horimetro_inicial: document.getElementById("horimetroInicial").value,
+        horimetro_final: document.getElementById("horimetroFinal").value,
+        tiempo_efectivo: document.getElementById("tiempoEfectivo").value,
+        tiempo_muerto: document.getElementById("tiempoMuerto").value,
+        horas_trabajo: document.getElementById("horasTrabajo").value,
+        h_inicio_desfrutadora: document.getElementById("hInicioDesfrutadora").value,
+        h_paro_desfrutadora: document.getElementById("hParoDesfrutadora").value,
+        detalles_tiempo_muerto: downtime,
+        cuantificacion_raquis: raquisRows,
+        racimos_mal_desfrutados: {
+          muestra_1: document.getElementById("rmd1").value,
+          muestra_2: document.getElementById("rmd2").value,
+          muestra_3: document.getElementById("rmd3").value,
+          muestra_4: document.getElementById("rmd4").value,
+          muestra_5: document.getElementById("rmd5").value,
+          muestra_6: document.getElementById("rmd6").value,
+          total: document.getElementById("rmdTotal").value
+        }
+      };
+    }
+
+    function syncDraft() {
+      const state = collectDraftState();
+      localStorage.setItem(STORAGE_KEY_PR01, JSON.stringify(state));
+      document.getElementById("autosaveStatus").textContent = `Borrador guardado (${getNowHHMM()})`;
+    }
+
+    function loadDraft() {
+      renderDowntimeCards();
+      const tbody = document.getElementById("raquisTableBody");
+      tbody.innerHTML = "";
+
+      const raw = localStorage.getItem(STORAGE_KEY_PR01);
+      if (!raw) {
+        document.getElementById("fecha").value = getTodayISO();
+        document.getElementById("turno").value = "Turno 1";
+        for (let i = 1; i <= INITIAL_RAQUIS_ROWS; i++) {
+          tbody.appendChild(createRaquisRowElement(i));
+        }
+        recalcRaquisTotals();
+        recalcProcesoAndRmd();
+        return;
+      }
+
+      const d = JSON.parse(raw);
+      document.getElementById("fecha").value = d.fecha || getTodayISO();
+      document.getElementById("turno").value = d.turno || "Turno 1";
+      document.getElementById("operador").value = d.operador || "";
+      document.getElementById("horimetroInicial").value = d.horimetro_inicial || "";
+      document.getElementById("horimetroFinal").value = d.horimetro_final || "";
+      document.getElementById("tiempoEfectivo").value = d.tiempo_efectivo || "";
+      document.getElementById("tiempoMuerto").value = d.tiempo_muerto || "";
+      document.getElementById("horasTrabajo").value = d.horas_trabajo || "";
+      document.getElementById("hInicioDesfrutadora").value = d.h_inicio_desfrutadora || "";
+      document.getElementById("hParoDesfrutadora").value = d.h_paro_desfrutadora || "";
+
+      if (d.detalles_tiempo_muerto) {
+        DOWNTIME_CATEGORIES.forEach(cat => {
+          const item = d.detalles_tiempo_muerto[cat.key];
+          if (item) {
+            document.getElementById(`dt-chk-${cat.key}`).checked = !!item.marcado;
+            document.getElementById(`dt-min-${cat.key}`).value = item.minutos || "";
+            document.getElementById(`dt-box-${cat.key}`).classList.toggle("active", !!item.marcado);
+          }
+        });
+      }
+
+      const rows = (d.cuantificacion_raquis && d.cuantificacion_raquis.length)
+        ? d.cuantificacion_raquis
+        : Array.from({ length: INITIAL_RAQUIS_ROWS }, () => ({}));
+
+      rows.forEach((rData, idx) => {
+        tbody.appendChild(createRaquisRowElement(idx + 1, rData));
+      });
+
+      if (d.racimos_mal_desfrutados) {
+        for (let i = 1; i <= 6; i++) {
+          document.getElementById(`rmd${i}`).value = d.racimos_mal_desfrutados[`muestra_${i}`] || "";
+        }
+        document.getElementById("rmdTotal").value = d.racimos_mal_desfrutados.total || "";
+      }
+
+      recalcRaquisTotals();
+      recalcProcesoAndRmd();
+    }
+
+    document.querySelectorAll(".persist-field").forEach(el => {
+      el.addEventListener("input", () => {
+        if (el.classList.contains("calc-proc") || el.classList.contains("calc-rmd")) {
+          recalcProcesoAndRmd(el.id);
+        }
+        syncDraft();
+      });
+      el.addEventListener("change", syncDraft);
+    });
+
+    function clearJornada() {
+      if (!confirm("¿Limpiar los datos de la jornada y operador?")) return;
+      document.getElementById("fecha").value = getTodayISO();
+      document.getElementById("turno").value = "Turno 1";
+      document.getElementById("operador").value = "";
+      syncDraft();
+    }
+
+    function showSyncModal(title, text) {
+      document.getElementById("syncModalTitle").textContent = title;
+      document.getElementById("syncModalText").textContent = text;
+      document.getElementById("syncModal").style.display = "flex";
+    }
+
+    function hideSyncModal() {
+      document.getElementById("syncModal").style.display = "none";
+    }
+
+    function showFeedback(msg, isWarning = false) {
+      const panel = document.getElementById("feedbackPanel");
+      panel.style.display = "block";
+      panel.className = isWarning ? "feedback-panel warn" : "feedback-panel";
+      panel.textContent = msg;
+    }
+
+    async function sendRowsToFlow(rowsPayload) {
+      if (!SHAREPOINT_PRENSADO_FLOW_URL || SHAREPOINT_PRENSADO_FLOW_URL.trim() === "") {
+        return { synced: false, configured: false };
+      }
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+      try {
+        const res = await fetch(SHAREPOINT_PRENSADO_FLOW_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tabla: "Prensado_racimos", filas: rowsPayload, ...(rowsPayload[0] || {}) }),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return { synced: true, configured: true, corsFallback: false };
+      } catch (err) {
+        clearTimeout(timeoutId);
+        if (err.name === "AbortError") {
+          throw new Error("Tiempo de espera agotado al contactar Power Automate");
+        }
+        if (err instanceof TypeError) {
+          throw new Error("Bloqueo CORS o de red al llamar a Power Automate");
+        }
+        throw err;
+      }
+    }
+
+    async function savePrensado() {
+      const fecha = document.getElementById("fecha").value;
+      if (!fecha) {
+        alert("Por favor ingrese la Fecha.");
+        document.getElementById("fecha").focus();
+        return;
+      }
+
+      const history = JSON.parse(localStorage.getItem(STORAGE_HIST_PR01) || "[]");
+      const nextId = history.length + 1;
+      const excelRows = buildExcelRows(nextId);
+
+      showSyncModal("Guardando registro...", `Preparando ${excelRows.length} fila(s) para Prensado_racimos...`);
+
+      let msg = "";
+      let isWarn = false;
+
+      const sentBody = { tabla: "Prensado_racimos", filas: excelRows, ...(excelRows[0] || {}) };
+      let shouldClear = false;
+      try {
+        const flowRes = await sendRowsToFlow(excelRows);
+        if (!flowRes.configured) {
+          msg = `¡REGISTRO #${nextId} GUARDADO LOCALMENTE! (${excelRows.length} fila(s) listas para tabla Prensado_racimos | Fecha: ${fecha} | Horas trabajo: ${document.getElementById("horasTrabajo").value || 0} | Total RMD: ${document.getElementById("rmdTotal").value || 0})`;
+        } else {
+          msg = `¡REGISTRO #${nextId} GUARDADO! (${excelRows.length} fila(s) enviadas a Prensado_racimos).`;
+        }
+        shouldClear = true;
+      } catch (err) {
+        isWarn = true;
+        msg = `Guardado localmente (#${nextId}), pero hubo un error al enviar (${err.message}).`;
+      } finally {
+        history.unshift({ id: nextId, fecha, filas: excelRows });
+        localStorage.setItem(STORAGE_HIST_PR01, JSON.stringify(history));
+        if (shouldClear) {
+          resetFormAfterSave();
+        }
+        hideSyncModal();
+        showFeedback(msg, isWarn);
+      }
+    }
+
+    function resetFormAfterSave() {
+      document.getElementById("fecha").value = getTodayISO();
+      document.getElementById("turno").value = "Turno 1";
+      document.getElementById("operador").value = "";
+      document.getElementById("horimetroInicial").value = "";
+      document.getElementById("horimetroFinal").value = "";
+      document.getElementById("tiempoEfectivo").value = "";
+      document.getElementById("tiempoMuerto").value = "";
+      document.getElementById("horasTrabajo").value = "";
+      document.getElementById("hInicioDesfrutadora").value = "";
+      document.getElementById("hParoDesfrutadora").value = "";
+
+      DOWNTIME_CATEGORIES.forEach(cat => {
+        const chk = document.getElementById(`dt-chk-${cat.key}`);
+        const inp = document.getElementById(`dt-min-${cat.key}`);
+        const box = document.getElementById(`dt-box-${cat.key}`);
+        if (chk) chk.checked = false;
+        if (inp) inp.value = "";
+        if (box) box.classList.remove("active");
+      });
+      document.getElementById("totalDowntimeDetail").textContent = "Marcados: 0 • Total detallado: 0.0 min";
+
+      const tbody = document.getElementById("raquisTableBody");
+      tbody.innerHTML = "";
+      for (let i = 1; i <= INITIAL_RAQUIS_ROWS; i++) {
+        tbody.appendChild(createRaquisRowElement(i));
+      }
+      recalcRaquisTotals();
+
+      for (let i = 1; i <= 6; i++) {
+        document.getElementById(`rmd${i}`).value = "";
+      }
+      document.getElementById("rmdTotal").value = "0";
+
+      localStorage.removeItem(STORAGE_KEY_PR01);
+      document.getElementById("autosaveStatus").textContent = `Formulario limpio (${getNowHHMM()})`;
+    }
+
+    loadDraft();
+  </script>
+</body>
+</html>
