@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control de Proceso de Producción de Vapor (FR-IN-SI-CA-01) - Palmatec</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-blue: #004085;
+      --primary-dark: #002752;
+      --accent-green: #76BC21;
+      --accent-green-hover: #619c1b;
+      --bg-light: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-dark: #1E293B;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+      --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.08);
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    header {
+      background: #fff;
+      padding: 1.1rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header img {
+      height: 48px;
+      object-fit: contain;
+    }
+    .logo-fallback {
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--primary-blue);
+      letter-spacing: 0.5px;
+      display: none;
+      align-items: center;
+    }
+    .header-title {
+      font-size: 1.1rem;
+      color: var(--primary-blue);
+      font-weight: 600;
+    }
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .doc-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: #F1F5F9;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .hero-banner-container {
+      width: 100%;
+      height: 210px;
+      position: relative;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-pattern {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.6;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: #fff;
+      padding: 0 1.5rem;
+    }
+    .hero-content h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .main-container {
+      max-width: 1460px;
+      margin: -2.2rem auto 4rem;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 1.75rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+    }
+    .card-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .card h3 {
+      color: var(--primary-blue);
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    .grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 1120px) {
+      .grid-5 { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 1024px) {
+      .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
+    }
+
+    .form-group { margin-bottom: 0.85rem; }
+    .form-group:last-child { margin-bottom: 0; }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.8rem;
+      margin-bottom: 0.35rem;
+      color: var(--text-dark);
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.86rem;
+      font-family: inherit;
+      background-color: #FFFFFF;
+      color: var(--text-dark);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 95px;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(0, 64, 133, 0.15);
+    }
+
+    .btn {
+      background-color: var(--accent-green);
+      color: #FFFFFF;
+      font-weight: 600;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn:hover { background-color: var(--accent-green-hover); }
+    .btn-secondary { background-color: #64748B; color: #fff; }
+    .btn-secondary:hover { background-color: #475569; }
+    .btn-outline {
+      background-color: #EFF6FF;
+      color: var(--primary-blue);
+      border: 1px solid #BFDBFE;
+      padding: 7px 12px;
+      font-size: 0.82rem;
+    }
+    .btn-outline:hover { background-color: #DBEAFE; }
+    .btn-danger-sm {
+      background-color: #FEE2E2;
+      color: #B91C1C;
+      border: 1px solid #FECACA;
+      padding: 5px 9px;
+      font-size: 0.78rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-danger-sm:hover { background-color: #FECACA; }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+    table.control-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      min-width: 1240px;
+    }
+    table.control-table th {
+      background: #F1F5F9;
+      color: var(--text-dark);
+      padding: 8px 6px;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      font-size: 0.76rem;
+      line-height: 1.25;
+    }
+    table.control-table th.group-ap {
+      background: #EFF6FF;
+      color: var(--primary-dark);
+    }
+    table.control-table td {
+      padding: 5px 5px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      vertical-align: middle;
+    }
+    table.control-table td.hora-cell {
+      width: 112px;
+      min-width: 108px;
+    }
+    table.control-table td input {
+      padding: 6px 6px;
+      font-size: 0.82rem;
+    }
+
+    .sub-box {
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .sub-box h4 {
+      color: var(--primary-dark);
+      font-size: 0.92rem;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .actions-bar {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .feedback-panel {
+      background: #0F172A;
+      color: #4ADE80;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      display: none;
+      border: 1px solid #22C55E;
+      white-space: pre-wrap;
+    }
+    .feedback-panel.warn {
+      color: #FBBF24;
+      border-color: #F59E0B;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .modal-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 410px;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-blue);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <img src="https://wppalmatec.azurewebsites.net/wp-content/uploads/2022/07/1-palmateclogo.png" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+      <div id="logoFallback" class="logo-fallback">PALMATEC</div>
+      <div class="header-title">Control de Proceso de Producción de Vapor (Caldera)</div>
+    </div>
+
+    <div class="header-badges">
+      <div class="doc-badge">
+        <span><strong>Código:</strong> FR-IN-SI-CA-01 | <strong>Versión:</strong> 5 | <strong>Fecha:</strong> 19/7/22 | <strong>Aprobado:</strong> J.Gamboa</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero-banner-container">
+    <div class="hero-pattern"></div>
+    <div class="hero-content">
+      <h1>CONTROL DE PROCESO DE PRODUCCIÓN DE VAPOR (CALDERA)</h1>
+    </div>
+  </section>
+
+  <div class="main-container">
+
+    <!-- 1. Jornada y Operadores -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Datos de Jornada y Operadores</h3>
+        <button type="button" class="btn btn-secondary" style="padding: 7px 14px; font-size: 0.82rem;" onclick="clearJornada()">
+          Limpiar jornada
+        </button>
+      </div>
+
+      <div class="grid-3">
+        <div class="form-group">
+          <label for="fecha">Fecha *</label>
+          <input type="date" id="fecha" class="persist-field" required>
+        </div>
+        <div class="form-group">
+          <label for="turno">Turno</label>
+          <select id="turno" class="persist-field">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="operador">Operador</label>
+          <input type="text" id="operador" class="persist-field" placeholder="Nombre del operador">
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Control Horario de Caldera -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Control Horario de Caldera</h3>
+        <button type="button" class="btn btn-outline" onclick="addCalderaRow()">+ Agregar línea</button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="control-table" id="calderaTable">
+          <thead>
+            <tr>
+              <th rowspan="2">Hora</th>
+              <th rowspan="2">Nivel de agua<br>(%)</th>
+              <th rowspan="2">Presión<br>(BAR)</th>
+              <th rowspan="2">Flujo de vapor<br>(KG/HR)</th>
+              <th rowspan="2">Hora de limpieza<br>del horno</th>
+              <th rowspan="2">Temperatura<br>gases (ºC)</th>
+              <th rowspan="2">Temp agua de<br>alimentación (ºc)</th>
+              <th rowspan="2">Conductividad</th>
+              <th colspan="2" class="group-ap">Ciclo 1</th>
+              <th colspan="2" class="group-ap">Ciclo 2</th>
+              <th rowspan="2" style="width: 56px;">Acción</th>
+            </tr>
+            <tr>
+              <th class="group-ap">Arranque</th>
+              <th class="group-ap">Paro</th>
+              <th class="group-ap">Arranque</th>
+              <th class="group-ap">Paro</th>
+            </tr>
+          </thead>
+          <tbody id="calderaTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. Operación, Químicos y Limpieza del Sistema de Lavado de Gases -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Operación, Químicos Aplicados y Limpieza del Sistema de Lavado de Gases</h3>
+      </div>
+
+      <div class="grid-3">
+        <div class="sub-box">
+          <h4>Resumen de Operación e Insumos</h4>
+          <div class="form-group">
+            <label for="inicioOperacion">Inicio de Operación</label>
+            <input type="time" id="inicioOperacion" class="persist-field">
+          </div>
+          <div class="form-group">
+            <label for="finOperacion">Fin de Operación</label>
+            <input type="time" id="finOperacion" class="persist-field">
+          </div>
+          <div class="form-group">
+            <label for="carretillosCeniza">Carretillos ceniza</label>
+            <input type="number" step="0.1" id="carretillosCeniza" class="persist-field" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label for="sacosSalUsados">Sacos de sal usados</label>
+            <input type="number" step="0.1" id="sacosSalUsados" class="persist-field" placeholder="0">
+          </div>
+        </div>
+
+        <div class="sub-box">
+          <h4>Químicos Aplicados</h4>
+          <div class="form-group">
+            <label for="quimicosAplicados">Detalle de químicos aplicados</label>
+            <textarea id="quimicosAplicados" class="persist-field" style="min-height: 195px;" placeholder="Escriba los químicos aplicados..."></textarea>
+          </div>
+        </div>
+
+        <div class="sub-box">
+          <h4>Limpieza del sistema de lavado se gases</h4>
+          <div class="form-group">
+            <label for="fechaLimpieza">Fecha de limpieza</label>
+            <input type="date" id="fechaLimpieza" class="persist-field">
+          </div>
+          <div class="form-group">
+            <label for="horaLimpieza">Hora de limpieza</label>
+            <input type="time" id="horaLimpieza" class="persist-field">
+          </div>
+          <div class="form-group">
+            <label for="observacionesLimpieza">Observaciones</label>
+            <textarea id="observacionesLimpieza" class="persist-field" style="min-height: 85px;" placeholder="Observaciones de limpieza o caldera..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <button type="button" class="btn" onclick="saveCaldera()">Guardar registro</button>
+    </div>
+
+    <div id="feedbackPanel" class="feedback-panel"></div>
+
+  </div>
+
+  <div class="modal-overlay" id="syncModal">
+    <div class="modal-card">
+      <div class="spinner"></div>
+      <h3 style="color: var(--primary-blue); margin-bottom: 0.5rem;" id="syncModalTitle">Guardando registro...</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;" id="syncModalText">Procesando registro FR-IN-SI-CA-01...</p>
+    </div>
+  </div>
+
+  <script>
+    // Pegue aquí la URL HTTP POST de su flujo de Power Automate para 'Caldera.xlsx' (Hoja1):
+    const SHAREPOINT_CALDERA_FLOW_URL = "https://default6f0898866713470696445eefd6431b.6b.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/22/workflows/4d4b20f7982045ca8288f8d5b2c2acd6/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=gBSwWMWK5sazPh9jAggMsCRzC-3_J2hPyLpIlJLSIuw";
+
+    const STORAGE_KEY_CA01 = "palmatec_ca01_draft_v5";
+    const STORAGE_HIST_CA01 = "palmatec_ca01_history_v5";
+
+    const HORAS_CALDERA_DEFAULT = [
+      "05:00", "06:00", "07:00", "08:00", "09:00", "10:00",
+      "11:00", "12:00", "13:00", "14:00", "15:00", "16:00",
+      "17:00", "18:00", "19:00", "20:00", "21:00", "22:00",
+      "23:00", "00:00", "01:00", "02:00", "03:00", "04:00"
+    ];
+
+    function getTodayISO() {
+      const d = new Date();
+      return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    }
+
+    function createCalderaRowElement(data = {}) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="hora-cell"><input type="time" data-ccol="hora" value="${data.hora || ""}"></td>
+        <td><input type="number" step="0.1" data-ccol="nivel_agua_pct" value="${data.nivel_agua_pct || ""}" placeholder="%"></td>
+        <td><input type="number" step="0.1" data-ccol="presion_bar" value="${data.presion_bar || ""}" placeholder="BAR"></td>
+        <td><input type="number" step="0.1" data-ccol="flujo_vapor_kghr" value="${data.flujo_vapor_kghr || ""}" placeholder="KG/HR"></td>
+        <td><input type="time" data-ccol="hora_limpieza_horno" value="${data.hora_limpieza_horno || ""}"></td>
+        <td><input type="number" step="0.1" data-ccol="temp_gases_c" value="${data.temp_gases_c || ""}" placeholder="ºC"></td>
+        <td><input type="number" step="0.1" data-ccol="temp_agua_alim_c" value="${data.temp_agua_alim_c || ""}" placeholder="ºc"></td>
+        <td><input type="number" step="0.01" data-ccol="conductividad" value="${data.conductividad || ""}" placeholder=""></td>
+        <td><input type="time" data-ccol="arranque_1" value="${data.arranque_1 || ""}"></td>
+        <td><input type="time" data-ccol="paro_1" value="${data.paro_1 || ""}"></td>
+        <td><input type="time" data-ccol="arranque_2" value="${data.arranque_2 || ""}"></td>
+        <td><input type="time" data-ccol="paro_2" value="${data.paro_2 || ""}"></td>
+        <td><button type="button" class="btn-danger-sm" onclick="removeCalderaRow(this)" title="Eliminar línea">✕</button></td>
+      `;
+      tr.querySelectorAll("input").forEach(inp => {
+        inp.addEventListener("input", syncDraft);
+        inp.addEventListener("change", syncDraft);
+      });
+      return tr;
+    }
+
+    function addCalderaRow(data = {}) {
+      document.getElementById("calderaTableBody").appendChild(createCalderaRowElement(data));
+      syncDraft();
+    }
+
+    function removeCalderaRow(btn) {
+      const tbody = document.getElementById("calderaTableBody");
+      if (tbody.querySelectorAll("tr").length <= 1) {
+        alert("Debe quedar al menos una línea.");
+        return;
+      }
+      btn.closest("tr").remove();
+      syncDraft();
+    }
+
+    function populateCalderaRows(rowsData = null) {
+      const tbody = document.getElementById("calderaTableBody");
+      tbody.innerHTML = "";
+      if (Array.isArray(rowsData) && rowsData.length > 0) {
+        rowsData.forEach(r => tbody.appendChild(createCalderaRowElement(r)));
+        return;
+      }
+      tbody.appendChild(createCalderaRowElement({ hora: "05:00" }));
+    }
+
+    function collectFormData() {
+      const registros = [];
+      document.querySelectorAll("#calderaTableBody tr").forEach(tr => {
+        const getC = col => tr.querySelector(`[data-ccol="${col}"]`).value.trim();
+        registros.push({
+          hora: getC("hora"),
+          nivel_agua_pct: getC("nivel_agua_pct"),
+          presion_bar: getC("presion_bar"),
+          flujo_vapor_kghr: getC("flujo_vapor_kghr"),
+          hora_limpieza_horno: getC("hora_limpieza_horno"),
+          temp_gases_c: getC("temp_gases_c"),
+          temp_agua_alim_c: getC("temp_agua_alim_c"),
+          conductividad: getC("conductividad"),
+          arranque_1: getC("arranque_1"),
+          paro_1: getC("paro_1"),
+          arranque_2: getC("arranque_2"),
+          paro_2: getC("paro_2")
+        });
+      });
+
+      return {
+        codigo: "FR-IN-SI-CA-01",
+        version: 5,
+        fecha: document.getElementById("fecha").value,
+        turno: document.getElementById("turno").value,
+        operador: document.getElementById("operador").value.trim(),
+        control_horario: registros,
+        operacion_insumos: {
+          inicio_operacion: document.getElementById("inicioOperacion").value,
+          fin_operacion: document.getElementById("finOperacion").value,
+          carretillos_ceniza: document.getElementById("carretillosCeniza").value.trim(),
+          sacos_sal_usados: document.getElementById("sacosSalUsados").value.trim(),
+          quimicos_aplicados: document.getElementById("quimicosAplicados").value.trim()
+        },
+        limpieza_lavado_gases: {
+          fecha_limpieza: document.getElementById("fechaLimpieza").value,
+          hora_limpieza: document.getElementById("horaLimpieza").value,
+          observaciones: document.getElementById("observacionesLimpieza").value.trim()
+        }
+      };
+    }
+
+    function syncDraft() {
+      localStorage.setItem(STORAGE_KEY_CA01, JSON.stringify(collectFormData()));
+    }
+
+    function loadDraft() {
+      const raw = localStorage.getItem(STORAGE_KEY_CA01);
+      if (!raw) {
+        document.getElementById("fecha").value = getTodayISO();
+        document.getElementById("turno").value = "1";
+        populateCalderaRows();
+        return;
+      }
+      const d = JSON.parse(raw);
+      document.getElementById("fecha").value = d.fecha || getTodayISO();
+      document.getElementById("turno").value = d.turno || "1";
+      document.getElementById("operador").value = d.operador || d.operador_1 || "";
+      populateCalderaRows(d.control_horario);
+
+      const op = d.operacion_insumos || {};
+      document.getElementById("inicioOperacion").value = op.inicio_operacion || "";
+      document.getElementById("finOperacion").value = op.fin_operacion || "";
+      document.getElementById("carretillosCeniza").value = op.carretillos_ceniza || "";
+      document.getElementById("sacosSalUsados").value = op.sacos_sal_usados || "";
+      document.getElementById("quimicosAplicados").value = op.quimicos_aplicados || "";
+
+      const limp = d.limpieza_lavado_gases || {};
+      document.getElementById("fechaLimpieza").value = limp.fecha_limpieza || "";
+      document.getElementById("horaLimpieza").value = limp.hora_limpieza || "";
+      document.getElementById("observacionesLimpieza").value = limp.observaciones || "";
+    }
+
+    document.querySelectorAll(".persist-field").forEach(el => {
+      el.addEventListener("input", syncDraft);
+      el.addEventListener("change", syncDraft);
+    });
+
+    function clearJornada() {
+      if (!confirm("¿Limpiar jornada (fecha, turno y operador)?")) return;
+      document.getElementById("fecha").value = getTodayISO();
+      document.getElementById("turno").value = "1";
+      document.getElementById("operador").value = "";
+      syncDraft();
+    }
+
+    function showSyncModal(title, text) {
+      document.getElementById("syncModalTitle").textContent = title;
+      document.getElementById("syncModalText").textContent = text;
+      document.getElementById("syncModal").style.display = "flex";
+    }
+
+    function hideSyncModal() {
+      document.getElementById("syncModal").style.display = "none";
+    }
+
+    function showFeedback(msg, isWarning = false) {
+      const panel = document.getElementById("feedbackPanel");
+      panel.style.display = "block";
+      panel.className = isWarning ? "feedback-panel warn" : "feedback-panel";
+      panel.textContent = msg;
+    }
+
+    function resetFormAfterSave() {
+      document.getElementById("fecha").value = getTodayISO();
+      document.getElementById("turno").value = "1";
+      document.getElementById("operador").value = "";
+      populateCalderaRows();
+      document.getElementById("inicioOperacion").value = "";
+      document.getElementById("finOperacion").value = "";
+      document.getElementById("carretillosCeniza").value = "";
+      document.getElementById("sacosSalUsados").value = "";
+      document.getElementById("quimicosAplicados").value = "";
+      document.getElementById("fechaLimpieza").value = "";
+      document.getElementById("horaLimpieza").value = "";
+      document.getElementById("observacionesLimpieza").value = "";
+      localStorage.removeItem(STORAGE_KEY_CA01);
+    }
+
+    // Construye las filas mapeadas exactamente a las 24 columnas de 'Caldera.xlsx' (Hoja1)
+    function buildExcelRows(startId) {
+      const fecha = document.getElementById("fecha").value;
+      const turno = document.getElementById("turno").value;
+      const operador = document.getElementById("operador").value.trim();
+
+      const inicioOperacion = document.getElementById("inicioOperacion").value;
+      const finOperacion = document.getElementById("finOperacion").value;
+      const carretillosCeniza = document.getElementById("carretillosCeniza").value.trim();
+      const sacosSalUsados = document.getElementById("sacosSalUsados").value.trim();
+      const quimicosAplicados = document.getElementById("quimicosAplicados").value.trim();
+
+      const fechaLimpieza = document.getElementById("fechaLimpieza").value;
+      const horaLimpieza = document.getElementById("horaLimpieza").value;
+      const observaciones = document.getElementById("observacionesLimpieza").value.trim();
+
+      const activeRows = [];
+      document.querySelectorAll("#calderaTableBody tr").forEach(tr => {
+        const getC = col => tr.querySelector(`[data-ccol="${col}"]`).value.trim();
+        const rObj = {
+          hora: getC("hora"),
+          nivel_agua: getC("nivel_agua_pct"),
+          presio: getC("presion_bar"),
+          flujo_vapor: getC("flujo_vapor_kghr"),
+          hora_limpieza_horno: getC("hora_limpieza_horno"),
+          temperatura_gases: getC("temp_gases_c"),
+          temp_agua_alimentacion: getC("temp_agua_alim_c"),
+          conductividad: getC("conductividad"),
+          arranque: getC("arranque_1"),
+          paro: getC("paro_1"),
+          arranque_2: getC("arranque_2"),
+          paro_2: getC("paro_2")
+        };
+        const hasAny = Object.values(rObj).some(v => v !== "");
+        if (hasAny) activeRows.push(rObj);
+      });
+
+      const rowsToEmit = activeRows.length > 0 ? activeRows : [{
+        hora: "",
+        nivel_agua: "",
+        presio: "",
+        flujo_vapor: "",
+        hora_limpieza_horno: "",
+        temperatura_gases: "",
+        temp_agua_alimentacion: "",
+        conductividad: "",
+        arranque: "",
+        paro: "",
+        arranque_2: "",
+        paro_2: ""
+      }];
+
+      return rowsToEmit.map((r, idx) => ({
+        Id: startId + idx,
+        Fecha: fecha,
+        Turno: turno,
+        Operador: operador,
+        Hora: r.hora,
+        Nivel_agua: r.nivel_agua,
+        Presio: r.presio,
+        Flujo_vapor: r.flujo_vapor,
+        Hora_limpieza_horno: r.hora_limpieza_horno,
+        Temperatura_gases: r.temperatura_gases,
+        Temp_agua_alimentacion: r.temp_agua_alimentacion,
+        Conductividad: r.conductividad,
+        Arranque: r.arranque,
+        Paro: r.paro,
+        Arranque_2: r.arranque_2,
+        Paro_2: r.paro_2,
+        Inicio_operacion: inicioOperacion,
+        Fin_operacion: finOperacion,
+        Carretillos_ceniza: carretillosCeniza,
+        sacos_sal: sacosSalUsados,
+        Quimicos_aplicados: quimicosAplicados,
+        Fecha_limpieza: fechaLimpieza,
+        Hora_limpieza: horaLimpieza,
+        Observaciones: observaciones
+      }));
+    }
+
+    async function sendRowsToFlow(rowsPayload) {
+      if (!SHAREPOINT_CALDERA_FLOW_URL || SHAREPOINT_CALDERA_FLOW_URL.trim() === "") {
+        return { synced: false, configured: false };
+      }
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+      try {
+        const res = await fetch(SHAREPOINT_CALDERA_FLOW_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            archivo: "Caldera.xlsx",
+            hoja: "Hoja1",
+            filas: rowsPayload,
+            ...(rowsPayload[0] || {})
+          }),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return { synced: true, configured: true };
+      } catch (err) {
+        clearTimeout(timeoutId);
+        if (err.name === "AbortError") throw new Error("Tiempo de espera agotado al contactar Power Automate");
+        if (err instanceof TypeError) throw new Error("Bloqueo CORS o de red al llamar a Power Automate");
+        throw err;
+      }
+    }
+
+    async function saveCaldera() {
+      const fecha = document.getElementById("fecha").value;
+      if (!fecha) {
+        alert("Por favor ingrese la Fecha.");
+        document.getElementById("fecha").focus();
+        return;
+      }
+
+      const history = JSON.parse(localStorage.getItem(STORAGE_HIST_CA01) || "[]");
+      const nextId = history.length + 1;
+      const excelRows = buildExcelRows(nextId);
+
+      showSyncModal("Guardando registro...", `Preparando ${excelRows.length} fila(s) para Caldera.xlsx...`);
+
+      let msg = "";
+      let isWarn = false;
+      let shouldClear = false;
+
+      try {
+        const flowRes = await sendRowsToFlow(excelRows);
+        if (!flowRes.configured) {
+          msg = `¡REGISTRO #${nextId} GUARDADO LOCALMENTE! (${excelRows.length} fila(s) listas para 'Caldera.xlsx' [Hoja1] | Fecha: ${fecha})`;
+        } else {
+          msg = `¡REGISTRO #${nextId} GUARDADO! (${excelRows.length} fila(s) enviadas a 'Caldera.xlsx' [Hoja1]).`;
+        }
+        shouldClear = true;
+      } catch (err) {
+        isWarn = true;
+        msg = `Guardado localmente (#${nextId}), pero hubo un error al enviar (${err.message}).`;
+      } finally {
+        history.unshift({ id: nextId, fecha, filas: excelRows, ...collectFormData() });
+        localStorage.setItem(STORAGE_HIST_CA01, JSON.stringify(history));
+        if (shouldClear) resetFormAfterSave();
+        hideSyncModal();
+        showFeedback(msg, isWarn);
+      }
+    }
+
+    loadDraft();
+  </script>
+</body>
+</html>
