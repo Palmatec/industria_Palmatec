@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control de Proceso Florentinos (FR-IN-PA-FL-03) - Palmatec</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-blue: #004085;
+      --primary-dark: #002752;
+      --accent-green: #76BC21;
+      --accent-green-hover: #619c1b;
+      --bg-light: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-dark: #1E293B;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+      --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.08);
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    header {
+      background: #fff;
+      padding: 1.1rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header img {
+      height: 48px;
+      object-fit: contain;
+    }
+    .logo-fallback {
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--primary-blue);
+      letter-spacing: 0.5px;
+      display: none;
+      align-items: center;
+    }
+    .header-title {
+      font-size: 1.1rem;
+      color: var(--primary-blue);
+      font-weight: 600;
+    }
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .doc-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: #F1F5F9;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .hero-banner-container {
+      width: 100%;
+      height: 210px;
+      position: relative;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-pattern {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.6;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: #fff;
+      padding: 0 1.5rem;
+    }
+    .hero-content h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .main-container {
+      max-width: 1480px;
+      margin: -2.2rem auto 4rem;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 1.75rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+    }
+    .card-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .card h3 {
+      color: var(--primary-blue);
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+    @media (max-width: 1024px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .grid-4, .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .form-group { margin-bottom: 0.85rem; }
+    .form-group:last-child { margin-bottom: 0; }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.8rem;
+      margin-bottom: 0.35rem;
+      color: var(--text-dark);
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.86rem;
+      font-family: inherit;
+      background-color: #FFFFFF;
+      color: var(--text-dark);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input[readonly] {
+      background-color: #F1F5F9;
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 95px;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(0, 64, 133, 0.15);
+    }
+
+    .btn {
+      background-color: var(--accent-green);
+      color: #FFFFFF;
+      font-weight: 600;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn:hover { background-color: var(--accent-green-hover); }
+    .btn-secondary { background-color: #64748B; color: #fff; }
+    .btn-secondary:hover { background-color: #475569; }
+    .btn-outline {
+      background-color: #EFF6FF;
+      color: var(--primary-blue);
+      border: 1px solid #BFDBFE;
+      padding: 7px 12px;
+      font-size: 0.82rem;
+    }
+    .btn-outline:hover { background-color: #DBEAFE; }
+    .btn-danger-sm {
+      background-color: #FEE2E2;
+      color: #B91C1C;
+      border: 1px solid #FECACA;
+      padding: 5px 9px;
+      font-size: 0.78rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-danger-sm:hover { background-color: #FECACA; }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+    table.control-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      min-width: 1120px;
+    }
+    table.control-table th {
+      background: #F1F5F9;
+      color: var(--text-dark);
+      padding: 8px 6px;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      font-size: 0.76rem;
+      line-height: 1.25;
+    }
+    table.control-table th.group-cpo {
+      background: #EFF6FF;
+      color: var(--primary-dark);
+    }
+    table.control-table td {
+      padding: 5px 5px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      vertical-align: middle;
+    }
+    table.control-table td input {
+      padding: 6px 6px;
+      font-size: 0.82rem;
+    }
+    table.control-table td.label-cell {
+      text-align: left;
+      font-weight: 600;
+      background: #F8FAFC;
+      color: var(--text-dark);
+      padding: 6px 10px;
+      white-space: nowrap;
+    }
+    table.recuperado-dinamico {
+      min-width: 780px;
+    }
+    table.resumen-cpo-table {
+      min-width: 560px;
+      margin-top: 1.15rem;
+    }
+    table.resumen-cpo-table th.resumen-header {
+      background: #EFF6FF;
+      color: var(--primary-dark);
+      font-size: 0.85rem;
+      padding: 8px;
+    }
+
+    .sub-box {
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .sub-box h4 {
+      color: var(--primary-dark);
+      font-size: 0.92rem;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .actions-bar {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .feedback-panel {
+      background: #0F172A;
+      color: #4ADE80;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      display: none;
+      border: 1px solid #22C55E;
+      white-space: pre-wrap;
+    }
+    .feedback-panel.warn {
+      color: #FBBF24;
+      border-color: #F59E0B;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .modal-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 410px;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-blue);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <img src="https://wppalmatec.azurewebsites.net/wp-content/uploads/2022/07/1-palmateclogo.png" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+      <div id="logoFallback" class="logo-fallback">PALMATEC</div>
+      <div class="header-title">Control de Proceso Florentinos</div>
+    </div>
+
+    <div class="header-badges">
+      <div class="doc-badge">
+        <span><strong>Código:</strong> FR-IN-PA-FL-03 | <strong>Versión:</strong> 3 | <strong>Fecha:</strong> 13/07/2022 | <strong>Aprobado:</strong> J.Gamboa</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero-banner-container">
+    <div class="hero-pattern"></div>
+    <div class="hero-content">
+      <h1>CONTROL DE PROCESO FLORENTINOS</h1>
+    </div>
+  </section>
+
+  <div class="main-container">
+
+    <!-- 1. Jornada y Operadores -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Datos de Jornada y Operadores</h3>
+        <button type="button" class="btn btn-secondary" style="padding: 7px 14px; font-size: 0.82rem;" onclick="clearJornada()">
+          Limpiar jornada
+        </button>
+      </div>
+
+      <div class="grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+        <div class="form-group">
+          <label for="fecha">Fecha *</label>
+          <input type="date" id="fecha" class="persist-field" required>
+        </div>
+        <div class="form-group">
+          <label for="turno">Turno</label>
+          <select id="turno" class="persist-field">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="operador">Operador</label>
+          <input type="text" id="operador" class="persist-field" placeholder="Nombre del operador">
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Control de Florentino (Flujo y Pérdidas) -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Control de Florentino</h3>
+        <button type="button" class="btn btn-outline" onclick="addFlujoRow()">+ Agregar línea</button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="control-table" id="flujoTable">
+          <thead>
+            <tr>
+              <th>Lectura Inicial</th>
+              <th>Lectura final</th>
+              <th>TOTAL DE M³</th>
+              <th>M³/ Hora</th>
+              <th>Total M³ / día</th>
+              <th>Total de TM<br>RFF procesadas</th>
+              <th>(M³ día/ton<br>RFF)</th>
+              <th>% Residual de<br>aceite</th>
+              <th>Pérdida de CPO<br>TM / Día</th>
+              <th style="width: 56px;">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="flujoTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. Cantidad CPO Recuperado en Florentinos -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Cantidad CPO Recuperado en Florentinos</h3>
+        <button type="button" class="btn btn-outline" onclick="addRecuperadoRow()">+ Agregar fila</button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="control-table recuperado-dinamico" id="recuperadoTable">
+          <thead>
+            <tr>
+              <th colspan="7" class="group-cpo" style="font-size: 0.88rem; padding: 9px 8px;">Cantidad CPO Recuperado en Florentinos</th>
+            </tr>
+            <tr>
+              <th style="min-width: 130px;">Aceite</th>
+              <th style="min-width: 130px;">Lodo liviano</th>
+              <th style="min-width: 130px;">Agua</th>
+              <th style="min-width: 130px;">Lodo pesado</th>
+              <th style="min-width: 130px;">Hora</th>
+              <th style="min-width: 190px;">Detalle / Nota</th>
+              <th style="width: 56px;">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="recuperadoTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="table-responsive" style="margin-top: 1.15rem;">
+        <table class="control-table resumen-cpo-table" id="resumenRecuperadoTable">
+          <thead>
+            <tr>
+              <th colspan="3" class="resumen-header">Resumen Total y Promedio por Concepto</th>
+            </tr>
+            <tr>
+              <th style="min-width: 180px;">Concepto</th>
+              <th style="min-width: 150px;">Total</th>
+              <th style="min-width: 150px;">Promedio</th>
+            </tr>
+          </thead>
+          <tbody id="resumenRecuperadoBody">
+            <tr>
+              <td class="label-cell">Aceite</td>
+              <td><input type="number" step="0.01" id="resTotalAceite" readonly placeholder="0.00"></td>
+              <td><input type="number" step="0.01" id="resPromAceite" readonly placeholder="0.00"></td>
+            </tr>
+            <tr>
+              <td class="label-cell">Lodo liviano</td>
+              <td><input type="number" step="0.01" id="resTotalLodoLiviano" readonly placeholder="0.00"></td>
+              <td><input type="number" step="0.01" id="resPromLodoLiviano" readonly placeholder="0.00"></td>
+            </tr>
+            <tr>
+              <td class="label-cell">Agua</td>
+              <td><input type="number" step="0.01" id="resTotalAgua" readonly placeholder="0.00"></td>
+              <td><input type="number" step="0.01" id="resPromAgua" readonly placeholder="0.00"></td>
+            </tr>
+            <tr>
+              <td class="label-cell">Lodo pesado</td>
+              <td><input type="number" step="0.01" id="resTotalLodoPesado" readonly placeholder="0.00"></td>
+              <td><input type="number" step="0.01" id="resPromLodoPesado" readonly placeholder="0.00"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 4. Cantidades de Fracciones y Comentarios -->
+    <div class="card">
+      <div class="card-header-flex">
+        <h3>Cantidades de Fracciones y Comentarios</h3>
+      </div>
+
+      <div class="grid-2">
+        <div class="sub-box">
+          <h4>Cantidades de Fracciones</h4>
+          <div class="form-group">
+            <label for="cantCpoRecuperado">Cantidad de CPO recuperado</label>
+            <input type="number" step="0.01" id="cantCpoRecuperado" class="persist-field" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label for="cantLodoLiviano">Cantidad de Lodo liviano</label>
+            <input type="number" step="0.01" id="cantLodoLiviano" class="persist-field" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label for="cantAgua">Cantidad de agua</label>
+            <input type="number" step="0.01" id="cantAgua" class="persist-field" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label for="cantLodoPesado">Cantidad de lodo pesado</label>
+            <input type="number" step="0.01" id="cantLodoPesado" class="persist-field" placeholder="0">
+          </div>
+        </div>
+
+        <div class="sub-box">
+          <h4>Comentarios</h4>
+          <div class="form-group">
+            <label for="comentarios">Comentarios</label>
+            <textarea id="comentarios" class="persist-field" style="min-height: 195px;" placeholder="Escriba los comentarios del proceso en florentinos..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <button type="button" class="btn" onclick="saveFlorentinos()">Guardar registro</button>
+    </div>
+
+    <div id="feedbackPanel" class="feedback-panel"></div>
+
+  </div>
+
+  <div class="modal-overlay" id="syncModal">
+    <div class="modal-card">
+      <div class="spinner"></div>
+      <h3 style="color: var(--primary-blue); margin-bottom: 0.5rem;" id="syncModalTitle">Guardando registro...</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;" id="syncModalText">Procesando registro FR-IN-PA-FL-03...</p>
+    </div>
+  </div>
+
+  <script>
+    // Pegue aquí la URL HTTP POST de Power Automate para Florentinos (FR-IN-PA-FL-03):
+    const SHAREPOINT_FLORENTINOS_FLOW_URL = "https://default6f0898866713470696445eefd6431b.6b.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/18/workflows/58bd843459da4ff28df0f3848d418e7c/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=jb625efNITohykHzx7dqhtdB5u6AQwJPkAIUNngUn-E";
+
+    const STORAGE_KEY_FL03 = "palmatec_fl03_draft_v8";
+    const STORAGE_HIST_FL03 = "palmatec_fl03_history_v8";
+
+    function getTodayISO() {
+      const d = new Date();
+      return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    }
+
+    function parseNum(val) {
+      const n = parseFloat(val);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function fmtNum(n, dec = 2) {
+      return Number.isFinite(n) ? n.toFixed(dec) : "";
+    }
+
+    function recalculateFlujoRow(tr) {
+      const ini = parseNum(tr.querySelector('[data-fcol="lectura_inicial"]').value);
+      const fin = parseNum(tr.querySelector('[data-fcol="lectura_final"]').value);
+      const totalM3Inp = tr.querySelector('[data-fcol="total_m3"]');
+
+      if (ini !== null && fin !== null) {
+        totalM3Inp.value = fmtNum(fin - ini, 2);
+      }
+    }
+
+    function createFlujoRowElement(data = {}) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><input type="number" step="0.01" data-fcol="lectura_inicial" value="${data.lectura_inicial || ""}" placeholder="0.00"></td>
+        <td><input type="number" step="0.01" data-fcol="lectura_final" value="${data.lectura_final || ""}" placeholder="0.00"></td>
+        <td><input type="number" step="0.01" data-fcol="total_m3" value="${data.total_m3 || ""}" readonly placeholder="Auto"></td>
+        <td><input type="number" step="0.01" data-fcol="m3_hora" value="${data.m3_hora || ""}" placeholder="M³/Hr"></td>
+        <td><input type="number" step="0.01" data-fcol="total_m3_dia" value="${data.total_m3_dia || ""}" placeholder="0.00"></td>
+        <td><input type="number" step="0.01" data-fcol="total_tm_rff" value="${data.total_tm_rff || ""}" placeholder="TM RFF"></td>
+        <td><input type="number" step="0.001" data-fcol="m3_dia_ton_rff" value="${data.m3_dia_ton_rff || ""}" placeholder="0.000"></td>
+        <td><input type="number" step="0.01" data-fcol="pct_residual_aceite" value="${data.pct_residual_aceite || ""}" placeholder="%"></td>
+        <td><input type="number" step="0.001" data-fcol="perdida_cpo_tm_dia" value="${data.perdida_cpo_tm_dia || ""}" placeholder="0.000"></td>
+        <td><button type="button" class="btn-danger-sm" onclick="removeRow(this, 'flujoTableBody')" title="Eliminar línea">✕</button></td>
+      `;
+      tr.querySelectorAll("input").forEach(inp => {
+        inp.addEventListener("input", () => {
+          recalculateFlujoRow(tr);
+          syncDraft();
+        });
+        inp.addEventListener("change", () => {
+          recalculateFlujoRow(tr);
+          syncDraft();
+        });
+      });
+      recalculateFlujoRow(tr);
+      return tr;
+    }
+
+    function recalculateResumenRecuperado() {
+      const conceptos = [
+        { col: "aceite", totalId: "resTotalAceite", promId: "resPromAceite" },
+        { col: "lodo_liviano", totalId: "resTotalLodoLiviano", promId: "resPromLodoLiviano" },
+        { col: "agua", totalId: "resTotalAgua", promId: "resPromAgua" },
+        { col: "lodo_pesado", totalId: "resTotalLodoPesado", promId: "resPromLodoPesado" }
+      ];
+
+      const rows = Array.from(document.querySelectorAll("#recuperadoTableBody tr"));
+      const resumen = {};
+
+      conceptos.forEach(cfg => {
+        const vals = rows
+          .map(tr => parseNum(tr.querySelector(`[data-rcol="${cfg.col}"]`).value))
+          .filter(v => v !== null);
+
+        const totalInp = document.getElementById(cfg.totalId);
+        const promInp = document.getElementById(cfg.promId);
+
+        if (vals.length > 0) {
+          const sum = vals.reduce((acc, v) => acc + v, 0);
+          const avg = sum / vals.length;
+          totalInp.value = fmtNum(sum, 2);
+          promInp.value = fmtNum(avg, 2);
+          resumen[cfg.col] = {
+            total: fmtNum(sum, 2),
+            promedio: fmtNum(avg, 2),
+            conteo: vals.length
+          };
+        } else {
+          totalInp.value = "";
+          promInp.value = "";
+          resumen[cfg.col] = {
+            total: "",
+            promedio: "",
+            conteo: 0
+          };
+        }
+      });
+
+      return resumen;
+    }
+
+    function createRecuperadoRowElement(data = {}) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><input type="number" step="0.01" data-rcol="aceite" value="${data.aceite || ""}" placeholder="0.00"></td>
+        <td><input type="number" step="0.01" data-rcol="lodo_liviano" value="${data.lodo_liviano || ""}" placeholder="0.00"></td>
+        <td><input type="number" step="0.01" data-rcol="agua" value="${data.agua || ""}" placeholder="0.00"></td>
+        <td><input type="number" step="0.01" data-rcol="lodo_pesado" value="${data.lodo_pesado || ""}" placeholder="0.00"></td>
+        <td><input type="time" data-rcol="hora" value="${data.hora || ""}"></td>
+        <td><input type="text" data-rcol="detalle_nota" value="${data.detalle_nota || ""}" placeholder="Observación"></td>
+        <td><button type="button" class="btn-danger-sm" onclick="removeRow(this, 'recuperadoTableBody')" title="Eliminar fila">✕</button></td>
+      `;
+
+      tr.querySelectorAll("input").forEach(inp => {
+        inp.addEventListener("input", () => {
+          recalculateResumenRecuperado();
+          syncDraft();
+        });
+        inp.addEventListener("change", () => {
+          recalculateResumenRecuperado();
+          syncDraft();
+        });
+      });
+
+      return tr;
+    }
+
+    function addFlujoRow(data = {}) {
+      document.getElementById("flujoTableBody").appendChild(createFlujoRowElement(data));
+      syncDraft();
+    }
+
+    function addRecuperadoRow(data = {}) {
+      document.getElementById("recuperadoTableBody").appendChild(createRecuperadoRowElement(data));
+      recalculateResumenRecuperado();
+      syncDraft();
+    }
+
+    function removeRow(btn, tbodyId) {
+      const tbody = document.getElementById(tbodyId);
+      if (tbody.querySelectorAll("tr").length <= 1) {
+        alert("Debe quedar al menos una línea.");
+        return;
+      }
+      btn.closest("tr").remove();
+      if (tbodyId === "recuperadoTableBody") {
+        recalculateResumenRecuperado();
+      }
+      syncDraft();
+    }
+
+    function populateTables(flujoRows = null, recRows = null) {
+      const fBody = document.getElementById("flujoTableBody");
+      fBody.innerHTML = "";
+      if (Array.isArray(flujoRows) && flujoRows.length > 0) {
+        flujoRows.forEach(r => fBody.appendChild(createFlujoRowElement(r)));
+      } else {
+        fBody.appendChild(createFlujoRowElement({}));
+      }
+
+      const rBody = document.getElementById("recuperadoTableBody");
+      rBody.innerHTML = "";
+      if (Array.isArray(recRows) && recRows.length > 0) {
+        recRows.forEach(r => rBody.appendChild(createRecuperadoRowElement(r)));
+      } else {
+        rBody.appendChild(createRecuperadoRowElement({}));
+      }
+      recalculateResumenRecuperado();
+    }
+
+    function collectFormData() {
+      const controlFlorentino = [];
+      document.querySelectorAll("#flujoTableBody tr").forEach(tr => {
+        const g = col => tr.querySelector(`[data-fcol="${col}"]`).value.trim();
+        controlFlorentino.push({
+          lectura_inicial: g("lectura_inicial"),
+          lectura_final: g("lectura_final"),
+          total_m3: g("total_m3"),
+          m3_hora: g("m3_hora"),
+          total_m3_dia: g("total_m3_dia"),
+          total_tm_rff: g("total_tm_rff"),
+          m3_dia_ton_rff: g("m3_dia_ton_rff"),
+          pct_residual_aceite: g("pct_residual_aceite"),
+          perdida_cpo_tm_dia: g("perdida_cpo_tm_dia")
+        });
+      });
+
+      const cpoRecuperadoFlorentinos = [];
+      document.querySelectorAll("#recuperadoTableBody tr").forEach(tr => {
+        const g = col => tr.querySelector(`[data-rcol="${col}"]`).value.trim();
+        cpoRecuperadoFlorentinos.push({
+          aceite: g("aceite"),
+          lodo_liviano: g("lodo_liviano"),
+          agua: g("agua"),
+          lodo_pesado: g("lodo_pesado"),
+          hora: g("hora"),
+          detalle_nota: g("detalle_nota")
+        });
+      });
+
+      const resumenRecuperado = recalculateResumenRecuperado();
+
+      return {
+        codigo: "FR-IN-PA-FL-03",
+        version: 3,
+        fecha: document.getElementById("fecha").value,
+        turno: document.getElementById("turno").value,
+        operador: document.getElementById("operador").value.trim(),
+        control_florentino: controlFlorentino,
+        cantidad_cpo_recuperado_florentinos: cpoRecuperadoFlorentinos,
+        resumen_cpo_recuperado: resumenRecuperado,
+        cantidades_fracciones: {
+          cantidad_cpo_recuperado: document.getElementById("cantCpoRecuperado").value.trim(),
+          cantidad_lodo_liviano: document.getElementById("cantLodoLiviano").value.trim(),
+          cantidad_agua: document.getElementById("cantAgua").value.trim(),
+          cantidad_lodo_pesado: document.getElementById("cantLodoPesado").value.trim()
+        },
+        comentarios: document.getElementById("comentarios").value.trim()
+      };
+    }
+
+    function syncDraft() {
+      localStorage.setItem(STORAGE_KEY_FL03, JSON.stringify(collectFormData()));
+    }
+
+    function loadDraft() {
+      const raw = localStorage.getItem(STORAGE_KEY_FL03);
+      if (!raw) {
+        document.getElementById("fecha").value = getTodayISO();
+        document.getElementById("turno").value = "1";
+        populateTables();
+        return;
+      }
+      const d = JSON.parse(raw);
+      document.getElementById("fecha").value = d.fecha || getTodayISO();
+      document.getElementById("turno").value = d.turno || "1";
+      document.getElementById("operador").value = d.operador || d.operador_1 || "";
+      populateTables(d.control_florentino, d.cantidad_cpo_recuperado_florentinos);
+
+      const f = d.cantidades_fracciones || {};
+      document.getElementById("cantCpoRecuperado").value = f.cantidad_cpo_recuperado || "";
+      document.getElementById("cantLodoLiviano").value = f.cantidad_lodo_liviano || "";
+      document.getElementById("cantAgua").value = f.cantidad_agua || "";
+      document.getElementById("cantLodoPesado").value = f.cantidad_lodo_pesado || "";
+      document.getElementById("comentarios").value = d.comentarios || "";
+    }
+
+    document.querySelectorAll(".persist-field").forEach(el => {
+      el.addEventListener("input", syncDraft);
+      el.addEventListener("change", syncDraft);
+    });
+
+    function clearJornada() {
+      if (!confirm("¿Limpiar jornada (fecha, turno y operador)?")) return;
+      document.getElementById("fecha").value = getTodayISO();
+      document.getElementById("turno").value = "1";
+      document.getElementById("operador").value = "";
+      syncDraft();
+    }
+
+    function showSyncModal(title, text) {
+      document.getElementById("syncModalTitle").textContent = title;
+      document.getElementById("syncModalText").textContent = text;
+      document.getElementById("syncModal").style.display = "flex";
+    }
+
+    function hideSyncModal() {
+      document.getElementById("syncModal").style.display = "none";
+    }
+
+    function showFeedback(msg, isWarning = false) {
+      const panel = document.getElementById("feedbackPanel");
+      panel.style.display = "block";
+      panel.className = isWarning ? "feedback-panel warn" : "feedback-panel";
+      panel.textContent = msg;
+    }
+
+    function resetFormAfterSave() {
+      document.getElementById("fecha").value = getTodayISO();
+      document.getElementById("turno").value = "1";
+      document.getElementById("operador").value = "";
+      populateTables();
+      document.getElementById("cantCpoRecuperado").value = "";
+      document.getElementById("cantLodoLiviano").value = "";
+      document.getElementById("cantAgua").value = "";
+      document.getElementById("cantLodoPesado").value = "";
+      document.getElementById("comentarios").value = "";
+      localStorage.removeItem(STORAGE_KEY_FL03);
+    }
+
+    function buildExcelPayloads(startId) {
+      const data = collectFormData();
+      const frac = data.cantidades_fracciones;
+      const recRows = data.cantidad_cpo_recuperado_florentinos || [];
+      const getRec = key => recRows.find(r => r.concepto_key === key) || {};
+
+      const res = data.resumen_cpo_recuperado || {};
+      const listVals = col => recRows.map(r => r[col]).filter(Boolean).join(", ");
+
+      const activeFlujo = data.control_florentino.filter(r =>
+        Object.values(r).some(v => v !== "")
+      );
+      const flujoToEmit = activeFlujo.length > 0 ? activeFlujo : [{
+        lectura_inicial: "",
+        lectura_final: "",
+        total_m3: "",
+        m3_hora: "",
+        total_m3_dia: "",
+        total_tm_rff: "",
+        m3_dia_ton_rff: "",
+        pct_residual_aceite: "",
+        perdida_cpo_tm_dia: ""
+      }];
+
+      const filas = flujoToEmit.map((r, idx) => ({
+        Id: startId + idx,
+        Fecha: data.fecha,
+        Turno: data.turno,
+        Operador: data.operador,
+        Lectura_inicial: r.lectura_inicial,
+        Lectura_final: r.lectura_final,
+        Total_m3: r.total_m3,
+        M3_hora: r.m3_hora,
+        Total_m3_dia: r.total_m3_dia,
+        Total_tm_rff: r.total_tm_rff,
+        M3_dia_ton_rff: r.m3_dia_ton_rff,
+        Pct_residual_aceite: r.pct_residual_aceite,
+        Perdida_cpo_tm_dia: r.perdida_cpo_tm_dia,
+        Aceite: (res.aceite && res.aceite.total) || listVals("aceite"),
+        Lodo_liviano: (res.lodo_liviano && res.lodo_liviano.total) || listVals("lodo_liviano"),
+        Agua: (res.agua && res.agua.total) || listVals("agua"),
+        Lodo_pesado: (res.lodo_pesado && res.lodo_pesado.total) || listVals("lodo_pesado"),
+        Hora: listVals("hora"),
+        Cantidad_cpo: frac.cantidad_cpo_recuperado,
+        Cantidad_lodo_liviano: frac.cantidad_lodo_liviano,
+        Cantidad_agua: frac.cantidad_agua,
+        Cantidad_lodo_pesado: frac.cantidad_lodo_pesado,
+        Comentarios: data.comentarios
+      }));
+
+      return {
+        archivo: "Florentino.xlsx",
+        hoja: "Hoja1",
+        codigo: data.codigo,
+        version: data.version,
+        resumen_cpo_recuperado: res,
+        filas,
+        ...(filas[0] || {})
+      };
+    }
+
+    async function sendToFlow(payload) {
+      if (!SHAREPOINT_FLORENTINOS_FLOW_URL || SHAREPOINT_FLORENTINOS_FLOW_URL.trim() === "") {
+        return { synced: false, configured: false };
+      }
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+      try {
+        const res = await fetch(SHAREPOINT_FLORENTINOS_FLOW_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return { synced: true, configured: true };
+      } catch (err) {
+        clearTimeout(timeoutId);
+        if (err.name === "AbortError") throw new Error("Tiempo de espera agotado al contactar Power Automate");
+        if (err instanceof TypeError) throw new Error("Bloqueo CORS o de red al llamar a Power Automate");
+        throw err;
+      }
+    }
+
+    async function saveFlorentinos() {
+      const fecha = document.getElementById("fecha").value;
+      if (!fecha) {
+        alert("Por favor ingrese la Fecha.");
+        document.getElementById("fecha").focus();
+        return;
+      }
+
+      const history = JSON.parse(localStorage.getItem(STORAGE_HIST_FL03) || "[]");
+      const nextId = history.length + 1;
+      const flowPayload = buildExcelPayloads(nextId);
+
+      showSyncModal("Guardando registro...", `Preparando datos para Florentinos.xlsx...`);
+
+      let msg = "";
+      let isWarn = false;
+      let shouldClear = false;
+
+      try {
+        const flowRes = await sendToFlow(flowPayload);
+        if (!flowRes.configured) {
+          msg = `¡REGISTRO #${nextId} GUARDADO LOCALMENTE! (${flowPayload.filas.length} fila(s) listas para 'Florentino.xlsx' [Hoja1])`;
+        } else {
+          msg = `¡REGISTRO #${nextId} GUARDADO! (${flowPayload.filas.length} fila(s) enviadas a 'Florentino.xlsx' [Hoja1]).`;
+        }
+        shouldClear = true;
+      } catch (err) {
+        isWarn = true;
+        msg = `Guardado localmente (#${nextId}), pero hubo un error al enviar (${err.message}).`;
+      } finally {
+        history.unshift({ id: nextId, ...flowPayload, raw: collectFormData() });
+        localStorage.setItem(STORAGE_HIST_FL03, JSON.stringify(history));
+        if (shouldClear) resetFormAfterSave();
+        hideSyncModal();
+        showFeedback(msg, isWarn);
+      }
+    }
+
+    loadDraft();
+  </script>
+</body>
+</html>
